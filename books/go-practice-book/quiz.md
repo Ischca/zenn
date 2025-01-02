@@ -673,3 +673,161 @@ Go の反射 (`reflect`) を使うと何ができるか？
 4. JavaのReflection APIをインポートする
 
 ---
+
+### Q51 (選択：Gin の基本ルート設定)
+
+Go の Gin フレームワークで最もシンプルなWebサーバを起動し、`GET /ping` にアクセスすると `"pong"` を返す例のコードとして正しいものはどれか？
+
+1. 
+   ```go
+   r := gin.Default()
+   r.GET("/ping", func(c *gin.Context) {
+       c.JSON(200, gin.H{"message": "pong"})
+   })
+   r.Run()
+   ```
+2. 
+   ```go
+   r := gin.New()
+   r.HttpGet("/ping", "pong")
+   r.Listen(":8080")
+   ```
+3. 
+   ```go
+   http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+       fmt.Fprintln(w, "pong")
+   })
+   http.ListenAndServe(":8080", nil)
+   ```
+4. 
+   ```go
+   gin.Start("/ping", "pong")
+   ```
+
+---
+
+### Q52 (穴埋め：Ginハンドラの引数)
+
+以下のGinハンドラで、リクエストコンテキストを受け取る引数は何と書くか？ 空欄( A ) を埋めよ。
+
+```go
+r.POST("/hello", func( (A) *gin.Context) {
+    name := (A).Query("name")
+    (A).String(200, "Hello %s", name)
+})
+```
+
+- ヒント：Ginのハンドラは通常 `func(c *gin.Context)` の形をとる。
+
+---
+
+### Q53 (選択：JSONバインド)
+
+Gin でクライアントが送ってきた JSON ボディを自動的に構造体にバインドする際によく使われるメソッドはどれか？
+
+1. `c.ShouldBindJSON(&obj)`
+2. `c.QueryObject(&obj)`
+3. `c.DecodeJSON(obj)`
+4. `json.NewDecoder(c).Decode(obj)`
+
+---
+
+### Q54 (短答：ステータスコードとJSON)
+
+Gin のハンドラ内で「ステータスコード201 を返しつつ JSON ボディ」を送りたい。1行の書き方を示せ。
+
+- 例：`c._____(201, gin.H{"id": newID})`
+
+---
+
+### Q55 (選択：URIパラメータ)
+
+以下のように `GET /users/:id` を定義したルートから、`id` を取得したい場合、ハンドラでどう書く？
+
+```go
+r.GET("/users/:id", func(c *gin.Context) {
+    // IDを取り出して表示
+})
+```
+
+1. `id := c.Query(":id")`
+2. `id := c.Param("id")`
+3. `id := c.FormValue("id")`
+4. `id, ok := c.Get("id")`
+
+---
+
+### Q56 (穴埋め：ルートグルーピング)
+
+Gin で複数のルートに同じPrefixを付けたい場合、以下のように書ける。空欄 ( B ) を埋めてください。
+
+```go
+r := gin.Default()
+
+api := r.(B)("/api")
+{
+    api.GET("/ping", pingHandler)
+    api.POST("/users", createUserHandler)
+}
+
+r.Run(":8080")
+```
+
+- ヒント： `/api/ping`、`/api/users` といったルートになるようにする。
+
+---
+
+### Q57 (選択：ミドルウェアの追加)
+
+Gin でグローバルミドルウェア（例：ロギングやリカバリ）を有効にする際の方法はどれか？
+
+1. `r.Use(myMiddleware)`  
+2. `gin.SetMiddleware(myMiddleware)`  
+3. `http.HandleMiddleware(myMiddleware)`  
+4. `myMiddleware(r)`
+
+---
+
+### Q58 (穴埋め：DBとGin ハンドラ)
+
+以下の関数例では `db *sql.DB` を受け取り、それをクロージャで使うようにしている。空欄( C ) を埋めよ。
+
+```go
+func main() {
+    db, _ := sql.Open("mysql", "...")
+
+    r := gin.Default()
+    r.GET("/items", getItemsHandler(db))
+    r.Run()
+}
+
+func getItemsHandler( (C) ) gin.HandlerFunc {
+    return func(c *gin.Context) {
+       // ここで db.Query(...) など使う
+    }
+}
+```
+
+---
+
+### Q59 (選択：クエリ文字列 vs JSONボディ)
+
+Gin でクエリパラメータ（`GET /something?name=foo`）を取得するには？
+
+1. `c.PostForm("name")`
+2. `c.Query("name")`
+3. `c.ShouldBindQuery(name)`
+4. `c.BindURI(&name)`
+
+---
+
+### Q60 (短答：400 BadRequest)
+
+以下のシーンで **400 BadRequest** としてレスポンスを返す一行を示せ。メッセージ `"Invalid input"` を JSON で返したい。
+
+```go
+// ...
+// c.???(??? , gin.H{"error": "Invalid input"})
+```
+
+*(ヒント： code=400, JSON body={"error": "..."} )*

@@ -637,3 +637,287 @@ func maxOf[T Comparable](x, y T) T {
 
 **解説**:  
 - `reflect` パッケージは**Java の Reflection のように**ランタイムで型を検査する仕組み。Go独自のAPIでフィールド名やタグを取得し、値を変更したりできる。
+
+---
+
+### **Q51**: Gin の基本ルート設定
+
+**問題 (再掲)**
+
+> Go の Gin フレームワークで最もシンプルなWebサーバを起動し、`GET /ping` にアクセスすると `"pong"` を返す例のコードとして正しいものはどれか？
+
+1. 
+   ```go
+   r := gin.Default()
+   r.GET("/ping", func(c *gin.Context) {
+       c.JSON(200, gin.H{"message": "pong"})
+   })
+   r.Run()
+   ```
+2. 
+   ```go
+   r := gin.New()
+   r.HttpGet("/ping", "pong")
+   r.Listen(":8080")
+   ```
+3. 
+   ```go
+   http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+       fmt.Fprintln(w, "pong")
+   })
+   http.ListenAndServe(":8080", nil)
+   ```
+4. 
+   ```go
+   gin.Start("/ping", "pong")
+   ```
+
+**解答**  
+**(1)**
+
+**詳しい解説**  
+- **(1)** は Gin の典型的な書き方で、 `gin.Default()` でルーターを作成し、 `r.GET("/ping", ...)` でエンドポイントを登録。その後 `r.Run()` で `:8080` ポートでサーバを起動します（デフォルトが 8080）。
+- (2) は実在しないメソッド `HttpGet`, (3) は Go の標準 `net/http` での書き方（Ginではない）、(4) は架空の呼び出し。
+
+**次の学習ステップ**:  
+- Gin の `r.Run(":3000")` のようにポートを指定する方法や、`gin.New()` でカスタムミドルウェアを手動で登録する方法を学ぶと、より柔軟なサーバ設定を理解できます。  
+- `POST`, `PUT`, `DELETE` など他のHTTPメソッド対応も試してみると、APIが書きやすいことが体感できるでしょう。
+
+---
+
+### **Q52**: Ginハンドラの引数
+
+**問題 (再掲)**
+
+```go
+r.POST("/hello", func( (A) *gin.Context) {
+    name := (A).Query("name")
+    (A).String(200, "Hello %s", name)
+})
+```
+**(A) に当てはまるのは何か？**
+
+**解答**  
+`(A) → c` （型は `*gin.Context`）
+
+```go
+r.POST("/hello", func(c *gin.Context) {
+    name := c.Query("name")
+    c.String(200, "Hello %s", name)
+})
+```
+
+**詳しい解説**  
+- Gin の各ハンドラは `func(c *gin.Context)` という形を取るのが基本。関数の引数名は自由だが、慣例的に `c` や `ctx` を使う。
+- `c.Query("name")` は `GET /hello?name=Bob` のようなクエリパラメータを取得。「POSTでもクエリ文字列を使う」ことはあり得ますが、POSTボディで送る場合は `c.PostForm("key")` または `ShouldBindJSON(&obj)` を活用する。
+
+**次の学習ステップ**:  
+- 「クエリ文字列」「URLパラメータ」「フォームデータ」「JSONボディ」など、Gin で入力を受け取る方法を比較し、どの場合にどのメソッドを使えばいいか整理してみましょう。
+
+---
+
+### **Q53**: JSONバインド
+
+**問題 (再掲)**  
+Gin でクライアントが送ってきた JSON を構造体にバインドする代表的なメソッドはどれか？
+
+1. `c.ShouldBindJSON(&obj)`
+2. `c.QueryObject(&obj)`
+3. `c.DecodeJSON(obj)`
+4. `json.NewDecoder(c).Decode(obj)`
+
+**解答**  
+**(1) `c.ShouldBindJSON(&obj)`**
+
+**詳しい解説**  
+- `ShouldBindJSON` (または `BindJSON`) は Gin 特有の関数で、HTTPボディを JSON として解析し、指定した構造体にマッピングしてくれます。エラー時は返り値で確認できます（ `err := c.ShouldBindJSON(&obj)` など）。
+- (2) `c.QueryObject` は非実在、(3) `c.DecodeJSON` や (4) `json.NewDecoder(c).Decode(obj)` は標準ライブラリスタイルで書く場合の手法ですが、Gin なら簡単に `ShouldBindJSON` が使える。
+
+**次の学習ステップ**:  
+- 実際に `ShouldBindJSON` で受け取る構造体にタグ（ `json:"..."` ）を付けてみたり、バリデーションライブラリを使って必須項目のチェックを加えてみると、API作りが実践的になります。
+
+---
+
+### **Q54**: ステータスコードと JSON
+
+**問題 (再掲)**  
+「ステータスコード201 を返しつつ JSON ボディ」を1行で返すには？
+
+**解答例**  
+```go
+c.JSON(201, gin.H{"id": newID})
+```
+
+**詳しい解説**  
+- `c.JSON(statusCode, any)` はもっともシンプルな書き方で、任意のオブジェクト(`gin.H` や構造体)をJSON化し、指定したHTTPステータスで送信します。201 はリソース作成時の標準ステータスコード「Created」。
+- 同様に `c.String(404, "Not Found")` のように文字列を送る方法などもある。
+
+**次の学習ステップ**:  
+- さまざまなステータスコード（200, 400, 401, 404, 500 など）と JSON を組み合わせる事例を試し、APIレスポンスを整えると実務的感覚がつかめます。
+
+---
+
+### **Q55**: URI パラメータ
+
+**問題 (再掲)**  
+`GET /users/:id` を定義しているルートから、`:id` を取得するにはどう書く？
+
+1. `id := c.Query(":id")`  
+2. `id := c.Param("id")`  
+3. `id := c.FormValue("id")`  
+4. `id, ok := c.Get("id")`
+
+**解答**  
+**(2) `id := c.Param("id")`**
+
+**詳しい解説**  
+- Gin の `Param` は「`/:param` と定義したURLパスの変数」を取り出すメソッド。例: `/users/:id` → `c.Param("id")` が文字列として返る。  
+- (1) `c.Query("...")` はクエリパラメータ `?key=value` 用、(3) `c.FormValue` は net/http 標準のフォーム取得に近いもの（Ginでは通常 `c.PostForm` ）。(4) は `c.Get` でコンテキスト変数を取得するケース。
+
+**次の学習ステップ**:  
+- URIパラメータが整数IDなら文字列を `strconv.Atoi` で変換する必要があります。そこからバリデーションの入れ方などを検討すると、より安全なAPIを構築できます。
+
+---
+
+### **Q56**: ルートグルーピング
+
+**問題 (再掲)**  
+```go
+r := gin.Default()
+api := r.(B)("/api")
+{
+    api.GET("/ping", pingHandler)
+    api.POST("/users", createUserHandler)
+}
+r.Run(":8080")
+```
+**(B)** に何を入れる？
+
+**解答**  
+`Group`
+
+```go
+api := r.Group("/api")
+```
+
+**詳しい解説**  
+- `r.Group("/something")` で「ルートのプレフィックス + ミドルウェアの一括適用」ができる。`/api/ping`, `/api/users` などが定義しやすくなる。  
+- サブグループも作るなど階層化できるため、大規模APIで便利。
+
+**次の学習ステップ**:  
+- グループにミドルウェアを付加する例（例: `api.Use(AuthMiddleware)`) を学ぶと、ルーティング設計がさらにわかりやすくなります。
+
+---
+
+### **Q57**: ミドルウェア
+
+**問題 (再掲)**  
+Gin でグローバルミドルウェアを有効にするには？
+
+1. `r.Use(myMiddleware)`
+2. `gin.SetMiddleware(myMiddleware)`
+3. `http.HandleMiddleware(myMiddleware)`
+4. `myMiddleware(r)`
+
+**解答**  
+**(1) `r.Use(myMiddleware)`**
+
+**詳しい解説**  
+- `r.Use(...)` を使うと、ルーター全体に対して前後処理やリカバリなどを挟むことができる。  
+- 内部的には `r.engine.Handlers` に追加され、リクエストごとに順番に呼ばれる形。
+
+**次の学習ステップ**:  
+- ミドルウェアでロギング、認証チェック、CORS設定などを行う事例を学ぶと、本格的なAPI設計が行いやすくなります。
+
+---
+
+### **Q58**: DB と Gin ハンドラ
+
+**問題 (再掲)**
+
+```go
+func getItemsHandler( (C) ) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        // ...
+    }
+}
+```
+
+**解答**: `(C) => db *sql.DB`
+
+```go
+func getItemsHandler(db *sql.DB) gin.HandlerFunc {
+    return func(c *gin.Context) {
+        // db.Query(...) 
+    }
+}
+```
+
+**詳しい解説**  
+- Go ではクロージャを使い、DBハンドルを引数で受け、Ginのハンドラ関数を返すやり方がよく用いられます。依存注入(DI)の簡易形とも言え、テストや拡張に有利。  
+- Alternative: `c.MustGet("db").(*sql.DB)` でコンテキストに仕込む方法もあるが、関数引数で受けるほうが安全・明瞭。
+
+**次の学習ステップ**:  
+- 実際に DB クエリ (`SELECT`, `INSERT`) を書き、JSON で返すAPIを作ると、Go + Gin + DB のフローが体験できます。テストデータを仕込んでみるのも効果的です。
+
+---
+
+### **Q59**: クエリ文字列 vs JSONボディ
+
+**問題 (再掲)**  
+`GET /something?name=foo` から `name` パラメータを得るにはどの方法？
+
+1. `c.PostForm("name")`
+2. `c.Query("name")`
+3. `c.ShouldBindQuery(name)`
+4. `c.BindURI(&name)`
+
+**解答**  
+**(2) `c.Query("name")`**
+
+**詳しい解説**  
+- `c.Query("key")` は `/path?key=xxx` のクエリパラメータ取得用。  
+- `c.PostForm("key")` は `POST` フォーム, `c.Param("id")` は `/:id`, `c.BindURI` はさらに構造体でURIパラメータをアンマッシュルするような仕組みに使う。
+
+**次の学習ステップ**:  
+- 実際に `GET /search?keyword=abc` のようなAPIを用意し、`c.Query("keyword")` を使って検索する例を作ると、クエリ取得を実践できます。
+
+---
+
+### **Q60**: 400 BadRequest
+
+**問題 (再掲)**  
+「400 BadRequest と JSON ボディ `{"error": "Invalid input"}` を返す一行」は？
+
+**解答例**:
+```go
+c.JSON(400, gin.H{"error": "Invalid input"})
+```
+
+**詳しい解説**  
+- `400` はクライアントのリクエストが不正という意味のステータスコード。Gin でエラーメッセージを JSON で返すパターンはよくあります。  
+- これを細かく整形したい場合、構造体を返してキー名を指定したりも可能。ステータスコードについては[HTTP標準]などを参照しましょう。
+
+**次の学習ステップ**:  
+- エラー時に `c.AbortWithStatusJSON(400, ...)` と書き、後続処理を打ち切るフローなどを学ぶと、エラー処理設計がはかどります。  
+- 実務ではエラーレスポンスを統一的に定義する（エラーコードや詳細メッセージなど）と大規模APIでも混乱が減ります。
+
+---
+
+# **まとめ**
+
+**Q51〜Q60** では、**Go + Gin** の API 開発で重要な基本要素を一通りカバーしました。
+
+1. **ルーティング**: `r.GET("/ping", ...)`, URIパラメータ (`:id` → `c.Param("id")`), クエリパラメータ (`c.Query("key")`), ルートグループ (`r.Group("/api")`), ミドルウェア (`r.Use`)  
+2. **JSON 入出力**: `c.ShouldBindJSON(&obj)` で入力、 `c.JSON(200, gin.H{...})` で出力  
+3. **DB 連携**: コンストラクタ的にハンドラへ `db` を渡す。`sql.DB` を使う例。  
+4. **HTTP ステータスコード** と**エラーハンドリング**: `c.JSON(400, ...)`, `c.JSON(201, ...)` など  
+
+これらを実際に試し、**小さなAPIサーバ**を作ると実務で使える感覚が得られます。**さらなるステップ**としては:
+
+- **JWT 認証**: ミドルウェアでトークンを検証する  
+- **Swagger/OpenAPI**: Gin で API ドキュメントを自動生成する  
+- **ORM**: GORM などを使い、モデル定義とマイグレーション  
+- **Docker/Kubernetes**: コンテナ上で Gin サーバを運用する  
+
+など、いくつかの発展的トピックを学ぶと、**本格的なバックエンド開発**にスムーズに移行できます。以上の問題や解答を活用して、Go + Gin の基礎を着実に身につけてください。
