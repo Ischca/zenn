@@ -183,19 +183,24 @@ func doSomething(a, b int) (int, error) {
 ---
 
 ### Q16 (穴埋め)
-以下の関数を完成させて、`nums` スライスの合計を返すようにしたい。
+以下の関数 `sumPositive` は、渡された `nums` スライスの要素のうち、**正の数**だけを合計して返したいという要求があります。空欄( A ) を埋めるとしたら、どの書き方が最も正しいでしょうか？
 
 ```go
-func sumSlice(nums []int) int {
+func sumPositive(nums []int) int {
     total := 0
-    for __, val := range nums {
-        total += val
+    for (A) {
+        if val > 0 {
+            total += val
+        }
     }
     return total
 }
 ```
 
-- 空欄を埋めよ（range 文の書き方）。
+1. `for val in nums:`  
+2. `for _, val := range nums`  
+3. `for i, val in range nums`  
+4. `for i := 0; i < len(nums); i++`
 
 ---
 
@@ -271,7 +276,8 @@ func (p *Person) UpdateAge(newAge int) {
 
 ---
 
-### Q23 (穴埋め: メソッド)
+### Q23
+以下の `Rect` 構造体には `Width` / `Height` があり、メソッド `Area()` は定義済みです。新たに「特定の幅・高さに更新する」処理をしたいが、呼び出し元にも反映されるようにしたい。どうメソッドを定義すればよいでしょうか？
 
 ```go
 type Rect struct {
@@ -282,19 +288,45 @@ type Rect struct {
 func (r Rect) Area() int {
     return r.Width * r.Height
 }
+```
 
-func (r *Rect) (A)(w int, h int) {
+1. 
+  ```go
+  func (r Rect) SetSize(w, h int) {
+    r.Width = w
+    r.Height = h
+  }
+  ```
+
+2. 
+```go
+func (r *Rect) SetSize(w, h int) {
     r.Width = w
     r.Height = h
 }
 ```
 
-- (A) に当てはまるメソッド名は、例えば `Resize` など自由だが、「**値レシーバ vs ポインタレシーバ**」に着目して書き換える関数をどう呼ぶか意図が伝わる名称を。
+3. 
+```go
+func (r Rect) SetSize(w, h int) Rect {
+    r.Width = w
+    r.Height = h
+    return r
+}
+```
+
+4. 
+```go
+func (r *Rect) SetSize(w, h float64) {
+    r.Width = int(w)
+    r.Height = int(h)
+}
+```
 
 ---
 
 ### Q24 (選択)
-Go の並行処理で、ゴルーチンを起動するキーワードはどれか。
+Go でゴルーチンを起動するキーワードとして正しいのはどれですか？
 
 1. `defer`  
 2. `go`  
@@ -314,9 +346,12 @@ Go のインターフェースはどのように実装が判断されるか。
 ---
 
 ### Q26 (単純回答)
-Go における「`error`型」は何を表すためのもの？短い説明で：
+Go における `error` は「(T, error)」で返す慣習がありますが、以下のように**いくつかの段階**（ファイルを開く → JSON デコード → さらに構造体を検証）で失敗するかもしれないコードがあるとします。どの方法が最も一般的でしょうか？
 
-- 解答欄: ___
+1. すべてのエラーを `panic` にし、recover でまとめてハンドリング  
+2. 各段階で `(T, error)` を返し、呼び出し元が `if err != nil { return ... }` する  
+3. Go はエラー概念を持たないため、C言語的に 0/1 を戻す  
+4. デバッグ時のみ fmt.Println(...) でエラーを表示し、本番は何もチェックしない
 
 ---
 
@@ -335,19 +370,22 @@ msg := <- results
 ---
 
 ### Q28 (穴埋め)
-以下の関数を完成させ、**並行**に動くゴルーチンを1つ起動し、「Hello from goroutine」と出力したい。
+以下の `worker` 関数を**並行**に3つ起動し、それぞれが特定の仕事をする。一方、メイン関数が先に終わってしまうとプログラム全体が終了してしまう。Go で待ち合わせるにはどうすべきでしょうか？
 
 ```go
 func main() {
-    __ sayHello() // ここでゴルーチン起動
-    fmt.Println("Hello from main")
-}
-
-func sayHello() {
-    fmt.Println("Hello from goroutine")
+    for i := 0; i < 3; i++ {
+        go worker(i)
+    }
+    // ここでどうやって「3つのworkerすべて終了」を待てるか？
+    fmt.Println("all done")
 }
 ```
 
+1. time.Sleep(5 * time.Second) で大体待つ  
+2. sync.WaitGroup を使って Add(3), Done(), Wait() を組み合わせる  
+3. 3つの global bool 変数を worker で true にして main でfor{}でチェック  
+4. net.Conn を使って Socket通信し、closeを検知する
 ---
 
 ### Q29 (判断)
@@ -359,11 +397,12 @@ Go のメソッドは、構造体だけでなく任意の型（例えば `type M
 ---
 
 ### Q30 (短答)
-Go で「複数の戻り値 `(result, error)`」を返す慣習は、**エラーをスローせずに明示的に取り扱う**ための設計意図である。  
-- 質問: Go では「例外(Exception)」の仕組みは基本的に使わず、代わりに何を使うか？  
-- 解答欄: ____
+Go で「複数の戻り値 `(result, error)`」を返す設計の背景として、「例外をスローせず明示的に扱う」方針があります。では、エラーをどうやって呼び出し側に伝え、処理するのが一般的でしょうか？
 
-*(ヒント: `(T, error)` のように返す / `panic` もあるが一般的ではない)*
+1. 例外発生時はコンパイラがエラーコードを埋め込み、実行停止する  
+2. `(result, err)` を返し、呼び出し側が `if err != nil { ... }` で対処する  
+3. `panic` を起こし、recover しなければ即プロセス終了  
+4. Go にはエラーと例外の概念が存在しない
 
 ---
 
@@ -546,16 +585,48 @@ func increment() {
 **対象トピック例**: Webハンドラ / `net/http` / ディレクトリ構造 / モジュール管理 / Contextやジェネリクス応用 / Docker活用など
 
 ### Q41 (選択: net/http)
-Go で**最小限のWebサーバ**を起動するにはどうするか？
+Go の Gin フレームワークを使って「複数のグループ ( `/api/v1/*` と `/api/v2/*` )」を定義し、それぞれ別のミドルウェアを適用したいとします。以下のコード例ではどう書けば、`/api/v1/users` と `/api/v2/items` それぞれに違うミドルウェアを適用できるでしょうか？
 
+(1)
 ```go
-http.HandleFunc("/", handler)
-____.ListenAndServe(":8080", nil)
+r := gin.Default()
+r.Group("/api")
+r.Group("/v1")
+r.Group("/v2")
+
+// ... define routes ...
+r.Run()
 ```
-1. `package nethttp`  
-2. `http`  
-3. `server`  
-4. `router`
+
+(2)
+```go
+r := gin.Default()
+v1 := r.Group("/api/v1", v1Middleware)
+{
+    v1.GET("/users", usersHandler)
+}
+v2 := r.Group("/api/v2", v2Middleware)
+{
+    v2.GET("/items", itemsHandler)
+}
+r.Run()
+```
+
+(3)
+```go
+r := gin.Default()
+r.Use("/api/v1", v1Middleware)
+r.Use("/api/v2", v2Middleware)
+r.Run()
+```
+
+(4)
+```go
+r := gin.New()
+r.Prefix("/api").Prefix("/v1").Use(v1Middleware)
+r.Prefix("/api").Prefix("/v2").Use(v2Middleware)
+r.Run()
+```
 
 ---
 
@@ -570,14 +641,12 @@ ____.ListenAndServe(":8080", nil)
 ---
 
 ### Q43 (穴埋め: Go module)
-Go モジュール化で `go.mod` を作るには？
+モジュール管理で `go.mod` を生成するには `go mod init ...` が定番ですが、**複数のモジュールパス**を同じリポジトリ内で別々に設定したいケースがあります。たとえば subディレクトリごとに異なる `go.mod` を置きたい場合、正しく進めるには？
 
-```bash
-cd myproject
-___ init example.com/myproject
-```
-- 何を入れれば `go.mod` が生成されるか？
-
+1. リポジトリ直下で `go mod init rootModule` すればサブディレクトリも自動で別モジュールになる  
+2. 各サブディレクトリに cd して `go mod init <modulePath>` を行い、マルチモジュール構成にする  
+3. sub1/ sub2/ のフォルダ名を vendor/ に変えればモジュール分割される  
+4. Gitのサブモジュールを導入してモジュール管理するとGoが自動推論する
 ---
 
 ### Q44 (選択: ディレクトリ構造)
@@ -591,12 +660,12 @@ ___ init example.com/myproject
 ---
 
 ### Q45 (選択: Docker + Go)
-GoのバイナリをDockerコンテナで動かす際、マルチステージビルドの典型例とは？
+Go には `init` 関数があり、パッケージ読み込み時に自動実行されます。プロジェクト内に多数のパッケージがあり、それぞれ複数 `init` を書いていたとします。その場合の挙動や注意点として正しいのはどれでしょうか？
 
-1. 1つ目のステージで `go build`、2つ目のステージでバイナリだけコピーして最小イメージ化  
-2. Dockerfileを2つ用意して同時にビルド  
-3. `docker-run main.go` で自動的に2ステージ  
-4. GoはDocker非対応
+1. すべての init 関数はソースファイルの記述順に呼ばれるため、後から書いた順番で優先して実行される  
+2. init は main 関数より後に呼ばれるので実行順序を制御できる  
+3. Go は `init` 関数が複数ある場合、コンパイルエラーになる  
+4. パッケージ間の依存関係 (import順) が決まった後、各パッケージの init が順に呼ばれるが、多用すると読みづらくなる
 
 ---
 
@@ -620,37 +689,43 @@ GoのバイナリをDockerコンテナで動かす際、マルチステージビ
 ---
 
 ### Q48 (選択: ジェネリクス応用)
-以下のジェネリック関数で、複数の型パラメータを使うときの正しい書き方は？
+Go のジェネリクスで「型パラメータを2つ受け取り、それぞれに異なる制約」を付与したいケースがあります。以下の空欄を埋める正しい構文は何ですか？
 
 ```go
-func combine[T, U](a T, b U) string {
-    // ...
+import "golang.org/x/exp/constraints"
+
+func combine[???](x T, y U) bool {
+    // T は Ordered(比較可能)
+    // U は 何でも可
+    return x > T(0) // など比較使用
 }
 ```
-1. `func combine(T, U)(a T, b U) string { ... }`  
-2. `func combine[T, U](a T, b U) string { ... }`  
-3. `func combine[T; U](a T, b U) string { ... }`  
-4. `func combine(a T, b U) string [T, U]`
+
+1. `[T constraints.Ordered | U any]`  
+2. `[T constraints.Ordered, U any]`  
+3. `[T, U constraints.Ordered]`  
+4. `[constraints.Ordered T, any U]`
 
 ---
 
 ### Q49 (穴埋め: interface + generics)
+以下に `Comparable` インターフェースと `maxOf[T Comparable]` 関数があるが、**複数種類の型**（int版, string版 など）を統合的に扱いたいとします。「どんな実装方法」が望ましいか？
+
 ```go
 type Comparable interface {
     Compare(other any) int
 }
 
 func maxOf[T Comparable](x, y T) T {
-    if x.Compare(y) > 0 {
-        return x
-    }
+    if x.Compare(y) > 0 { return x }
     return y
 }
 ```
-- このように、ジェネリクスでインターフェースを**型パラメータの制約**として使用できる。  
-- 問: `x.Compare(y)` が正なら x のほうが大きいとみなし、そうでなければ y を返す。**この (穴埋め)**: 何を実装すればいい？
 
-*(紙面ではヒントを出す想定：たとえば `type MyInt int` が `Compare(other any) int` を持つ、など。)*
+1. 演算子オーバーロードを定義し、`x > y` を直接書けるようにする  
+2. それぞれの型 (MyInt, MyString etc.) が Compare(o any) メソッド内で自分の型にアサートし、大小比較を実装する  
+3. Reflection でおおざっぱに `val := reflect.ValueOf(x)` → compare any し、空文字なら負数等  
+4. panic していれば maxOf が呼ばれた時点で強制終了する
 
 ---
 
@@ -699,17 +774,22 @@ gin.Start("/ping", "pong")
 ---
 
 ### Q52 (穴埋め：Ginハンドラの引数)
-
-以下のGinハンドラで、リクエストコンテキストを受け取る引数は何と書くか？ 空欄( A ) を埋めよ。
+Gin でPOSTリクエストを受け取り、JSON をパースしてレスポンスを返したい。以下の例で、(A) には典型的にどんな名前を使い、そして JSON をどうバインドするのが一般的か？
 
 ```go
-r.POST("/hello", func( (A) *gin.Context) {
-    name := (A).Query("name")
-    (A).String(200, "Hello %s", name)
+r.POST("/api", func((A) *gin.Context) {
+    var req struct {
+        ID   int    `json:"id"`
+        Name string `json:"name"`
+    }
+    // JSONバインドして ID, Name を取得 → c.JSON で返す
 })
 ```
 
-- ヒント：Ginのハンドラは通常 `func(c *gin.Context)` の形をとる。
+1. func(r *gin.Context), r.BindForm(req)  
+2. func(c *gin.Context), c.ShouldBindJSON(&req)  
+3. func(ctx *http.Request), ctx.ParseMultipartForm(...)  
+4. func(aaa *gin.Data), ?
 
 ---
 
