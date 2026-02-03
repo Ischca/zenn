@@ -10,8 +10,6 @@ published: false
 
 ブランチを切り替えるたびにstashする、という作業を面倒に感じたことはないでしょうか。Git worktreeを使うとその手間が減ります。Claude Codeと組み合わせると並列作業がしやすくなります。この記事では、worktreeとISSUE.mdを使ったワークフローを整理します。
 
-# ISSUE.md + worktreeワークフロー
-
 ## Git worktreeとは
 
 Git worktreeは、同じリポジトリから複数の作業ディレクトリを作成できるGitの機能です。
