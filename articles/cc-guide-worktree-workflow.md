@@ -8,7 +8,9 @@ published: false
 
 ## はじめに
 
-ブランチを切り替えるたびにstashする、という作業を面倒に感じたことはないでしょうか。Git worktreeを使うとその手間が減ります。Claude Codeと組み合わせると並列作業がしやすくなります。この記事では、worktreeとISSUE.mdを使ったワークフローを整理します。
+ブランチを切り替えるたびにstashする、という作業を面倒に感じたことはないでしょうか。
+Git worktreeを使うとその手間が減ります。Claude Codeと組み合わせると並列作業がしやすくなります。
+この記事では、worktreeとISSUE.mdを使ったワークフローを整理します。
 
 ## Git worktreeとは
 
