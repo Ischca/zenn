@@ -3,7 +3,7 @@ title: "Claude Code ことはじめ"
 emoji: "🖥️"
 type: "tech"
 topics: ["claudecode", "ai", "cli", "開発ツール"]
-published: false
+published: true
 ---
 
 ## はじめに
