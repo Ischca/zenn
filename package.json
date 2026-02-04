@@ -8,12 +8,19 @@
     "preview": "zenn preview",
     "new:article": "zenn new:article",
     "new:book": "zenn new:book",
-    "new:scrapbox": "zenn new:scrapbox"
+    "new:scrapbox": "zenn new:scrapbox",
+    "lint": "textlint articles/*.md",
+    "lint:fix": "textlint --fix articles/*.md"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "zenn-cli": "^0.4.5"
+  },
+  "devDependencies": {
+    "@textlint-ja/textlint-rule-preset-ai-writing": "latest",
+    "textlint": "latest",
+    "textlint-rule-preset-ja-technical-writing": "latest"
   }
 }

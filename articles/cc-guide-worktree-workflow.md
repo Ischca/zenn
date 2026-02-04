@@ -9,38 +9,41 @@ published: false
 ## はじめに
 
 ブランチを切り替えるたびにstashする、という作業を面倒に感じたことはないでしょうか。
-Git worktreeを使うとその手間が減ります。Claude Codeと組み合わせると並列作業がしやすくなります。
+Git worktreeを使うとその手間が減ります。
+Claude Codeと組み合わせると並列作業がしやすくなります。
 この記事では、worktreeとISSUE.mdを使ったワークフローを整理します。
 
 ## Git worktreeとは
 
 Git worktreeは、同じリポジトリから複数の作業ディレクトリを作成できるGitの機能です。
 
-[公式ドキュメント](https://code.claude.com/docs/en/common-workflows)では次のように説明されています：
+[公式ドキュメント](https://code.claude.com/docs/en/common-workflows)では次のように説明されています。
 
 > Git worktreeを使うと、同じリポジトリから複数のブランチを別々のディレクトリに同時にチェックアウトできます。各worktreeは独立したファイル状態を持つ独自の作業ディレクトリを持ちながら、同じGit履歴を共有します。
 
-通常、1つのリポジトリでは1つのブランチしかチェックアウトできませんが、worktreeを使えば複数のブランチを同時に開いて作業できます。
+通常、1つのリポジトリでは1つのブランチしかチェックアウトできません。
+worktreeを使えば複数のブランチを同時に開いて作業できます。
 
 ## Claude Codeとworktreeの組み合わせ
 
-[公式ドキュメント](https://code.claude.com/docs/en/common-workflows)では、Claude Codeとworktreeの組み合わせを以下のように説明しています：
+[公式ドキュメント](https://code.claude.com/docs/en/common-workflows)では、Claude Codeとworktreeの組み合わせを以下のように説明しています。
 
 > 複数のタスクを同時に作業する必要があり、Claude Codeインスタンス間で完全なコード分離が必要な場合に使用します。
 >
 > 各worktreeは独自の独立したファイル状態を持っているため、並列のClaude Codeセッションに最適です。1つのworktreeで行われた変更は他に影響せず、Claudeインスタンスが互いに干渉するのを防ぎます。
 
-つまり：
+つまり以下のような並列作業が可能になります。
+
 - worktree A で Issue #123 を作業（Claude Code インスタンス A）
 - worktree B で Issue #456 を作業（Claude Code インスタンス B）
 
-という並列作業が可能になります。
-
 ## ISSUE.mdとは
 
-ISSUE.mdは、このシリーズで紹介する独自のプラクティスです。worktree作成時に、対象Issueの情報をISSUE.mdファイルとして配置します。
+ISSUE.mdは、このシリーズで紹介する独自のプラクティスです。
+worktree作成時に、対象Issueの情報をISSUE.mdファイルとして配置します。
 
-ISSUE.mdに含める情報：
+ISSUE.mdに含める情報は以下です。
+
 - Issueのタイトルと本文
 - 関連するディスカッションコメント
 - 関連Issue/PRへのリンク
@@ -52,15 +55,18 @@ ISSUE.mdに含める情報：
 
 ### 自動化しやすい
 
-worktree作成とISSUE.md生成をスクリプト化できます。Issue番号を渡すだけで作業環境が整います。
+worktree作成とISSUE.md生成をスクリプト化できます。
+Issue番号を渡すだけで作業環境が整います。
 
 ### 方向性が明確
 
-ISSUE.mdを読めば「何をすべきか」がわかります。Claude Codeに「ISSUE.mdを読んで、計画を立てて」と指示するだけで作業を開始できます。
+ISSUE.mdを読めば「何をすべきか」がわかります。
+Claude Codeに「ISSUE.mdを読んで、計画を立てて」と指示するだけで作業を開始できます。
 
 ### 並列作業が可能
 
-複数のworktreeで複数のClaude Codeインスタンスを動かせます。1つのIssueの作業中に別のIssueも進められます。
+複数のworktreeで複数のClaude Codeインスタンスを動かせます。
+1つのIssueの作業中に別のIssueも進められます。
 
 ### 干渉がない
 
@@ -68,7 +74,7 @@ ISSUE.mdを読めば「何をすべきか」がわかります。Claude Codeに�
 
 ## worktreeの基本操作
 
-[公式ドキュメント](https://code.claude.com/docs/en/common-workflows)から、基本操作を引用します：
+[公式ドキュメント](https://code.claude.com/docs/en/common-workflows)から、基本操作を引用します。
 
 ### 新しいworktreeを作成
 
@@ -130,14 +136,14 @@ echo "worktree created: $WORKTREE_DIR"
 echo "Run: cd $WORKTREE_DIR && claude"
 ```
 
-使用例：
+使用例です。
 ```bash
 ./start-issue.sh 123
 ```
 
 ## Claude Codeでの作業開始
 
-worktreeに移動してClaude Codeを起動したら、以下のように指示します：
+worktreeに移動してClaude Codeを起動したら、以下のように指示します。
 
 ```
 ISSUE.mdを読んで、このIssueに対応するための計画を立てて。
@@ -148,7 +154,7 @@ ISSUE.mdを読んで、このIssueに対応するための計画を立てて。
 
 ## 注意点
 
-[公式ドキュメント](https://code.claude.com/docs/en/common-workflows)では以下の注意点が挙げられています：
+[公式ドキュメント](https://code.claude.com/docs/en/common-workflows)では以下の注意点が挙げられています。
 
 > 新しい各worktreeでプロジェクトのセットアップに従って開発環境を初期化することを忘れないでください。スタックによって以下が含まれます：
 > - JavaScriptプロジェクト：依存関係のインストール（`npm install`、`yarn`）
@@ -159,14 +165,14 @@ worktreeは独立したファイル状態を持つため、`node_modules`など�
 
 ## 実践的なワークフロー
 
-1. **Issue選択**：取り組むIssueを決める
-2. **worktree作成**：`start-issue.sh`でworktreeとISSUE.mdを生成
-3. **環境セットアップ**：依存関係のインストール
-4. **Claude Code起動**：worktreeでclaude起動
-5. **計画確認**：ISSUE.mdを読ませて計画を立てさせる
-6. **実装**：計画に問題なければ実装
-7. **PR作成**：Claude CodeにPR作成を依頼
-8. **クリーンアップ**：マージ後にworktreeを削除
+1. Issue選択：取り組むIssueを決める
+2. worktree作成：`start-issue.sh`でworktreeとISSUE.mdを生成
+3. 環境セットアップ：依存関係のインストール
+4. Claude Code起動：worktreeでclaude起動
+5. 計画確認：ISSUE.mdを読ませて計画を立てさせる
+6. 実装：計画に問題なければ実装
+7. PR作成：Claude CodeにPR作成を依頼
+8. クリーンアップ：マージ後にworktreeを削除
 
 ## まとめ
 

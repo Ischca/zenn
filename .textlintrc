@@ -1,0 +1,39 @@
+{
+  "rules": {
+    "@textlint-ja/preset-ai-writing": {
+      "no-ai-list-formatting": {
+        "allows": [],
+        "disableBoldListItems": false,
+        "disableEmojiListItems": true
+      },
+      "no-ai-hype-expressions": {
+        "allows": [],
+        "disableAbsolutenessPatterns": false,
+        "disableAbstractPatterns": false,
+        "disabledPredictivePatterns": false
+      },
+      "no-ai-colon-continuation": {
+        "allows": ["使用方法:", "インストール方法:", "設定方法:", "例:", "注意:", "参考:"],
+        "disableCodeBlock": false,
+        "disableList": false,
+        "disableQuote": false,
+        "disableTable": false
+      },
+      "ai-tech-writing-guideline": {
+        "severity": "info",
+        "allows": [],
+        "disableRedundancyGuidance": false,
+        "disableVoiceGuidance": false,
+        "disableClarityGuidance": false,
+        "disableConsistencyGuidance": false,
+        "disableStructureGuidance": false,
+        "enableDocumentAnalysis": true
+      }
+    },
+    "preset-ja-technical-writing": {
+      "ja-space-between-half-and-full-width": {
+        "space": "never"
+      }
+    }
+  }
+}
