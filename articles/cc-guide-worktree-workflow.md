@@ -1,9 +1,10 @@
 ---
-title: "Claude Code実践ガイド: ISSUE.md + worktreeワークフロー"
+title: "[Claude Code] worktree + ISSUE.mdを使ったブレない並列開発手法"
 emoji: "🌳"
 type: "tech"
 topics: ["claudecode", "ai", "cli", "開発ツール", "git"]
-published: false
+published: true
+published_at: 2026-02-12 16:00
 ---
 
 ## はじめに
@@ -15,14 +16,8 @@ Claude Codeと組み合わせると並列作業がしやすくなります。
 
 ## Git worktreeとは
 
-Git worktreeは、同じリポジトリから複数の作業ディレクトリを作成できるGitの機能です。
-
-[公式ドキュメント](https://code.claude.com/docs/en/common-workflows)では次のように説明されています。
-
-> Git worktreeを使うと、同じリポジトリから複数のブランチを別々のディレクトリに同時にチェックアウトできます。各worktreeは独立したファイル状態を持つ独自の作業ディレクトリを持ちながら、同じGit履歴を共有します。
-
-通常、1つのリポジトリでは1つのブランチしかチェックアウトできません。
-worktreeを使えば複数のブランチを同時に開いて作業できます。
+Git worktreeは、同じリポジトリから複数のブランチを同時に開ける機能です。
+各worktreeは独立したファイル状態を持ちながら、同じGit履歴を共有します。
 
 ## Claude Codeとworktreeの組み合わせ
 
@@ -32,24 +27,14 @@ worktreeを使えば複数のブランチを同時に開いて作業できます
 >
 > 各worktreeは独自の独立したファイル状態を持っているため、並列のClaude Codeセッションに最適です。1つのworktreeで行われた変更は他に影響せず、Claudeインスタンスが互いに干渉するのを防ぎます。
 
-つまり以下のような並列作業が可能になります。
-
-- worktree A で Issue #123 を作業（Claude Code インスタンス A）
-- worktree B で Issue #456 を作業（Claude Code インスタンス B）
+つまり、worktree Aで Issue #123、worktree Bで Issue #456 というように、複数のIssueを並列で進められます。
 
 ## ISSUE.mdとは
 
-ISSUE.mdは、このシリーズで紹介する独自のプラクティスです。
-worktree作成時に、対象Issueの情報をISSUE.mdファイルとして配置します。
+ISSUE.mdは、worktree作成時に対象Issueの情報をまとめたファイルです。
 
-### ISSUE.mdに含める情報
-
-- Issueのタイトルと本文
-- 関連するディスカッションコメント
-- 関連Issue/PRへのリンク
-- 追加のコンテキスト（設計メモ、制約など）
-
-これにより、Claude Codeを起動したときに「このworktreeで何をすべきか」が明確になります。
+ISSUE.mdには、Issueのタイトルと本文、関連コメント、関連Issue/PRへのリンク、設計メモなどを含めます。
+Claude Codeを起動したときに「このworktreeで何をすべきか」が明確になります。
 
 ## なぜこのワークフローが有効か
 
@@ -73,8 +58,6 @@ Claude Codeに「ISSUE.mdを読んで、計画を立てて」と指示するだ�
 各worktreeは独立したファイル状態を持つため、あるworktreeでの変更が別のworktreeに影響しません。
 
 ## worktreeの基本操作
-
-[公式ドキュメント](https://code.claude.com/docs/en/common-workflows)から、基本操作を引用します。
 
 ### 新しいworktreeを作成
 
@@ -153,13 +136,6 @@ ISSUE.mdを読んで、このIssueに対応するための計画を立てて。
 計画を確認し、問題なければ実装を許可します。
 
 ## 注意点
-
-[公式ドキュメント](https://code.claude.com/docs/en/common-workflows)では以下の注意点が挙げられています。
-
-> 新しい各worktreeでプロジェクトのセットアップに従って開発環境を初期化することを忘れないでください。スタックによって以下が含まれます：
-> - JavaScriptプロジェクト：依存関係のインストール（`npm install`、`yarn`）
-> - Pythonプロジェクト：仮想環境のセットアップまたはパッケージマネージャでのインストール
-> - その他の言語：プロジェクトの標準セットアッププロセスに従う
 
 worktreeは独立したファイル状態を持つため、`node_modules`などは各worktreeで個別にインストールが必要です。
 

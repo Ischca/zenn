@@ -1,20 +1,20 @@
 ---
-title: "Claude Code実践ガイド: MCPの活用と判断基準"
+title: "Claude CodeにMCPはまだ要らない"
 emoji: "🔌"
 type: "tech"
 topics: ["claudecode", "ai", "cli", "開発ツール", "mcp"]
-published: false
+published: true
+published_at: 2026-02-11 16:00
 ---
 
 ## はじめに
 
-MCPという言葉を見て「また新しい概念か」と思った方もいるかもしれません。
-正直なところ、使わなくても困らない場面の方が多いです。
+MCPは使わなくても困らない場面がほとんどです。
 この記事では、MCPとは何か、どういう場面で使うかの判断基準を整理します。
 
 ## MCPとは
 
-MCP（Model Context Protocol）は、AIモデルと外部システムを接続するためのプロトコルです。
+MCP（Model Context Protocol）は、外部サービス連携のためのプロトコルです。
 
 [公式ドキュメント](https://code.claude.com/docs/en/overview)では次のように説明されています。
 
@@ -26,16 +26,8 @@ MCP（Model Context Protocol）は、AIモデルと外部システムを接続�
 > - プロジェクト設定（そのディレクトリでClaude Codeを実行するときに利用可能）
 > - チェックインされた.mcp.jsonファイル（コードベースで作業する誰でも利用可能）
 
-つまりMCPを使えば、Claude Codeの能力を外部サービスに拡張できます。
-
-## MCPサーバーの例
-
-よく使われるMCPサーバーの例です。
-
-- Context7：ライブラリやフレームワークの公式ドキュメントを取得
-- Chrome DevTools：ブラウザとの連携、DOM操作
-- GitHub MCP：GitHub APIとの連携
-- Database MCP：データベースへのクエリ実行
+MCPを使えば、Claude Codeの能力を外部サービスに拡張できます。
+例えばContext7（ドキュメント取得）やChrome DevTools（ブラウザ連携）などがあります。
 
 ## MCPを使うべき場面
 
@@ -64,13 +56,7 @@ Slack、Jira、Notionなど、チームで使っているツールとの連携�
 
 GitHubの操作であれば、`gh`コマンドで十分なことが多いです。わざわざMCPを導入する必要はありません。
 
-同様に、以下のようなケースもCLIで十分です。
-
-- AWS操作 → `aws` CLI
-- Kubernetes操作 → `kubectl`
-- データベースクエリ → `psql`、`mysql`
-
-既存のCLIツールで対応できるなら、そちらを使うほうがシンプルです。
+AWS操作なら`aws`、Kubernetes操作なら`kubectl`、データベースクエリなら`psql`や`mysql`など、既存のCLIツールで対応できるならそちらを使うほうがシンプルです。
 
 ### コンテキスト圧迫が懸念されるとき
 

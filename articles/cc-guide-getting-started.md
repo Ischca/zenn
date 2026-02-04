@@ -4,6 +4,7 @@ emoji: "🖥️"
 type: "tech"
 topics: ["claudecode", "ai", "cli", "開発ツール"]
 published: true
+published_at: 2026-02-04 16:00
 ---
 
 ## はじめに
