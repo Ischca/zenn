@@ -17,6 +17,8 @@ published: false
 Claude Code (クロード・コード)は、ターミナル上で対話しながら作業を進める開発支援ツールです。
 GitHub Copilotのような単発のコード提案とは違い、調査・修正・検証・変更内容の取りまとめを、ひとつのセッション内で連続して扱えます。
 
+![](/images/claude_demo.gif)
+
 ## ChatGPT／GitHub Copilot との役割分担
 
 AIを使った開発ではChatGPTやGitHub Copilotなども良く使われます。
@@ -45,13 +47,26 @@ Claude Codeをコード生成の道具としてのみ捉えると、できるこ
 ### インストール
 
 ターミナルで以下を実行します。
+*※ npmインストールは現在非推奨です。*
 
+#### Mac
 ```bash
 curl -fsSL https://claude.ai/install.sh | bash
 ```
 
+#### Windows
+```bash
+# Windows PowerShell:
+irm https://claude.ai/install.ps1 | iex
+
+# WinGet (Windows):
+winget install Anthropic.ClaudeCode
+```
+
 自動更新されるので、常に最新版が使えます。
-その他の方法（Homebrew、Windows など）は公式ドキュメントを参照してください。
+
+その他の方法（Homebrew など）は公式ドキュメントを参照してください。
+[公式ドキュメント - インストール](https://code.claude.com/docs/ja/setup)
 
 ### 起動
 
@@ -107,27 +122,28 @@ Plan mode は、調査と計画作成に限定したモードです。ファイ�
 claude --permission-mode plan
 ```
 
-セッション中のモード切替は Shift+Tab で行えます（Plan / Auto Accept / Normal の順に切り替わります）。
+セッション中のモード切替は Shift+Tab で行えます（Auto Accept　/ Plan / Normal の順に切り替わります）。
+![](/images/claude_mode_change.gif)
 
 ### 許可設定の方針
 
-REPL 上で `/config` を実行すると、許可設定を確認・変更できます。設定はグローバルとプロジェクト単位で分かれています。
+セッション中に `/config` を実行すると、権限設定を確認・変更できます。設定はグローバルとプロジェクト単位で分かれています。
 
-許可を広く与えるより、危険な操作を明示的に拒否し、低リスクな操作だけ許可する方針が安定します。
+認証情報へのアクセスなどの危険な操作を明示的に拒否し、低リスクな操作だけを許可する方針がおすすめです。
 
 設定例：
 
-- テスト実行、lint 実行 → 自動許可
-- 外部通信を伴う操作、認証情報へのアクセス → 拒否
-- 削除や広範囲の一括置換 → 都度確認
+- テスト実行、lint 実行 → 許可(allow)
+- 認証情報へのアクセス → 拒否(deny)
+- rmやmvなどの破壊的操作 → 都度確認(ask)
 
 ## 次に読む対象（発展）
 
-基本の流れ（調査→修正→検証→取りまとめ）が安定した後に、拡張として検討しやすい領域です。
+基本的な使い方（調査→修正→検証→取りまとめ）に慣れてきたら、さらに以下のトピックを学ぶことをおすすめします。
 
 ### MCP（外部連携）
 
-外部のツールやデータソース（チケット管理、監視システム、DB、社内 API など）を Claude Code に接続する枠組みです。コードだけでは完結しない作業が多い環境で有効です。
+外部のツールやデータソース（チケット管理、監視システム、DB、社内 API など）を Claude Code などから接続するため仕組みです。コードだけでは完結しない作業が多い環境で有効です。
 
 ### Skills（定型化）
 
