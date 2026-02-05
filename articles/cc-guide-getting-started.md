@@ -111,7 +111,10 @@ claude
 
 ## 権限（permission）と安全設計
 
-Claude Code は、無制限に任意コマンドを実行する設計ではありません。操作に対して許可を挟む仕組みがあり、許可モードを切り替えながら段階的に作業を進めるのが現実的です。
+Claude Code は、無制限に任意コマンドを実行する設計ではありません。操作に対して許可を挟む仕組みがあり、デフォルトではコマンドごとに実行許可を与えながら作業を進めます。
+
+セッション中のモード切替は Shift+Tab で行えます（Auto Accept　/ Plan / Normal の順に切り替わります）。
+![](/images/claude_mode_change.gif)
 
 ### Plan mode
 
@@ -120,9 +123,6 @@ Plan mode は、調査と計画作成に限定したモードです。ファイ�
 ```bash
 claude --permission-mode plan
 ```
-
-セッション中のモード切替は Shift+Tab で行えます（Auto Accept　/ Plan / Normal の順に切り替わります）。
-![](/images/claude_mode_change.gif)
 
 ### 許可設定の方針
 
