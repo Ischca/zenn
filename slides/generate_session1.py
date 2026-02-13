@@ -212,13 +212,21 @@ def slide_02_series_overview(prs):
         )
         y += Inches(1.8)
 
+    # 今日のゴール
+    add_text_box(
+        slide, Inches(0.8), Inches(6.3), Inches(11.5), Inches(0.5),
+        "今日のゴール: 調査・要約タスクをClaude Codeに任せられるようになる",
+        font_size=16, color=ACCENT, bold=True
+    )
+
     add_page_number(slide, 2)
     add_speaker_notes(slide,
         "3回シリーズの構成を説明。\n"
         "第1回は「理解する」。Claude Codeとは何か、どう使うかの基本。\n"
         "第2回は「カスタマイズする」。チームに合わせた設定。\n"
         "第3回は「スケールさせる」。自動化と並列化。\n"
-        "同じメンバーが3回とも参加する前提。")
+        "同じメンバーが3回とも参加する前提。\n"
+        "今日のゴールは「調査・要約を任せられるようになる」。")
 
 
 def slide_03_first_step(prs):
@@ -268,7 +276,7 @@ def slide_03_first_step(prs):
     )
     add_text_box(
         slide, Inches(6.9), pain_y + Inches(0.5), Inches(5.0), Inches(0.4),
-        "PRの影響範囲が3分で出る", font_size=17, color=TEXT_LIGHT
+        "影響範囲が数分で整理できる", font_size=17, color=TEXT_LIGHT
     )
 
     # 下部メッセージ
@@ -282,7 +290,7 @@ def slide_03_first_step(prs):
     add_speaker_notes(slide,
         "まず「業務の一部だけ任せる」という現実的な入口を示す。\n"
         "調査・影響範囲の把握は時間が溶けやすい。ここが最初の狙いどころ。\n"
-        "最初の小さな成果が「3分で影響範囲が出る」などの即効性。\n"
+        "最初の小さな成果が「影響範囲が数分で整理できる」などの即効性。\n"
         "いきなり実装させるのではなく、調査・要約・差分整理に限定する。\n"
         "この範囲なら既存業務と直結し、リスクも低い。\n"
         "この感覚を持ってもらった上で、もう少し詳しく見ていく。")
@@ -302,10 +310,10 @@ def slide_04_what_is_cc(prs):
     add_multiline_text(
         slide, Inches(0.8), Inches(2.0), Inches(5.5), Inches(4.5),
         [
-            "ターミナル上で動くAIエージェント",
+            "ターミナル上で動くAIエージェント\n  指示は自然言語でOK",
             "調査 → 修正 → 検証 → 取りまとめを一連で扱う",
-            "ファイルの読み書き、コマンド実行を自律的に行う\n  （都度許可 or 自動承認を選べる）",
-            "デフォルトは読み取り専用\n  編集やコマンド実行には明示的な許可が必要",
+            "デフォルトは読み取り専用\n  最初はコードを読むだけで安全",
+            "ファイル編集やコマンド実行は都度許可制\n  勝手に変更される心配はない",
             "「コードを書く」ではなく「作業を進める」ツール",
         ],
         font_size=18, bullet=True, line_spacing=1.6
@@ -787,11 +795,11 @@ def slide_10_good_instructions(prs):
     )
     add_code_block(
         slide, Inches(6.5), Inches(4.0), Inches(5.8), Inches(2.6),
-        "CIでtests/authのテストが3件落ちている。\n"
-        "現状：昨日のリファクタ以降失敗するように。\n"
-        "目標：テストを全件通す。\n"
-        "原因を調査して、修正案を提案して。\n"
-        "既存の振る舞いは変えないこと。",
+        "ビルドが失敗している。\n"
+        "現状：昨日のリファクタ以降通らなくなった。\n"
+        "目標：ログを要約し、原因候補を3つ挙げて。\n"
+        "調査結果は箇条書きでまとめて。\n"
+        "コードの変更はまだしないこと。",
         font_size=13
     )
 
@@ -800,7 +808,7 @@ def slide_10_good_instructions(prs):
         "指示の4要素：目標、背景・制約、現状、期待する出力。\n"
         "全部揃っている必要はないが、目標は必須。\n"
         "悪い例：「この機能を改善して」→ 何を改善？どう改善？が不明。\n"
-        "良い例：現状・目標・制約が明確。\n"
+        "良い例：Slide 7と同じビルド失敗シナリオ。現状・目標・制約が明確。\n"
         "ポイント：指示が具体的であるほど、結果も具体的になる。")
 
 
@@ -816,9 +824,9 @@ def slide_11_context_passing(prs):
     )
 
     methods = [
-        ("画像ペースト", "スクショやデザインを共有", "エラー画面のキャプチャを貼る"),
-        ("URL指定", "Webページを読ませる", "このドキュメントを読んで: https://..."),
-        ("ファイル名を伝える", "対象ファイルを明示する", "src/auth.ts を見て"),
+        ("画像ペースト  *", "スクショやデザインを共有", "エラー画面のキャプチャを貼る"),
+        ("URL指定  *", "Webページを読ませる", "このドキュメントを読んで: https://..."),
+        ("ファイル名を伝える  *", "対象ファイルを明示する", "src/auth.ts を見て"),
         ("ディレクトリ指定", "Claudeに探索させる", "このディレクトリを調べて"),
         ("パイプ（上級者向け）", "コマンド出力を渡す", 'cat error.log | claude -p "原因を教えて"'),
     ]
@@ -844,17 +852,17 @@ def slide_11_context_passing(prs):
     # VS Code 注記
     add_text_box(
         slide, Inches(0.8), y + Inches(0.2), Inches(11), Inches(0.4),
-        "※ VS Code拡張では @ファイル名 でファイルを参照できる",
+        "* まずはこの3つから / VS Code拡張では @ファイル名 でも参照可",
         font_size=13, color=TEXT_DIM
     )
 
     add_page_number(slide, 11)
     add_speaker_notes(slide,
         "コンテキストを渡す方法はいくつかある。\n"
-        "画像やURLなど、非CLIでも渡せる方法から始めるのが安全。\n"
-        "ファイル名を伝えて対象を明示する方法は基本的。VS Code拡張なら@記法も使える。\n"
+        "迷ったら「画像・URL・ファイル名」の3つから始めればOK。\n"
         "画像もコピー＆ペーストで渡せる。エラー画面やデザインカンプなど。\n"
         "URLを渡してWebページを読ませることもできる。\n"
+        "ファイル名を伝えて対象を明示する方法は基本的。VS Code拡張なら@記法も使える。\n"
         "パイプでコマンド出力を渡す方法は上級者向け。ログ分析などに便利。"
         "-p フラグでプロンプトも一緒に渡せる。\n"
         "ディレクトリ指定でClaude自身に探索させることも可能。")
@@ -993,19 +1001,19 @@ def slide_14_plan_mode_what(prs):
         )
         y += Inches(0.95)
 
-    # 操作方法
+    # 効果
     add_text_box(
         slide, Inches(0.8), Inches(5.2), Inches(6), Inches(0.5),
-        "操作方法", font_size=20, color=ACCENT, bold=True
+        "なぜ Plan Mode から始めるのか", font_size=20, color=ACCENT, bold=True
     )
-    add_code_block(
-        slide, Inches(0.8), Inches(5.8), Inches(5.5), Inches(1.3),
-        "# セッション中の切替\n"
-        "Shift+Tab または Alt+M\n"
-        "\n"
-        "# 起動時に指定\n"
-        "claude --permission-mode plan",
-        font_size=14
+    add_multiline_text(
+        slide, Inches(1.2), Inches(5.8), Inches(10), Inches(1.3),
+        [
+            "計画段階で認識のズレに気づける",
+            "コードを壊すリスクがゼロ",
+            "手戻りを最小限にしてから実装に入れる",
+        ],
+        font_size=16, bullet=True, line_spacing=1.5
     )
 
     add_page_number(slide, 14)
@@ -1013,7 +1021,8 @@ def slide_14_plan_mode_what(prs):
         "Plan Modeは読み取り専用のモード。\n"
         "まずPlan Modeで方針を固め、実装はレビュー後に許可する。\n"
         "最初はPlan Mode固定で始めると失敗しにくい。\n"
-        "切替はShift+TabかAlt+Mで。起動時に --permission-mode plan で指定もできる。\n"
+        "操作方法：セッション中はShift+TabかAlt+Mで切替。\n"
+        "起動時に --permission-mode plan で指定もできる。\n"
         "Extended Thinkingとは別の概念。\n"
         "Extended Thinking = 深く考えさせる（think, think hard）\n"
         "Plan Mode = 使えるツールを制限する\n"
@@ -1038,9 +1047,9 @@ def slide_15_plan_mode_workflow(prs):
         ("Step 2", "計画をレビュー",
          "「後方互換性はどうする？」「テストは？」",
          "不明点をつぶし、計画を確定する", HIGHLIGHT),
-        ("Step 3", "実装を許可して進める",
-         "「OK、実装して」",
-         "計画に沿って実装が進む", ACCENT),
+        ("Step 3", "必要に応じて実装を許可",
+         "「OK、実装して」/ 調査だけならここで完了",
+         "計画に沿って実装、または調査結果を活用", ACCENT),
         ("Step 4", "結果を確認・コミット",
          "テスト実行 → PR作成",
          "変更内容を取りまとめて完了", TEXT_WHITE),
