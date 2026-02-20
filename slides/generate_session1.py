@@ -30,7 +30,7 @@ FONT_JP = "Hiragino Sans"
 
 SLIDE_W = Inches(13.333)
 SLIDE_H = Inches(7.5)
-TOTAL = 17
+TOTAL = 16
 
 
 def set_slide_bg(slide, color):
@@ -177,7 +177,7 @@ def slide_01_title(prs):
 
 
 def slide_02_series_overview(prs):
-    """シリーズ全体像."""
+    """全3回のロードマップ."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
 
@@ -215,7 +215,7 @@ def slide_02_series_overview(prs):
     # 今日のゴール
     add_text_box(
         slide, Inches(0.8), Inches(6.3), Inches(11.5), Inches(0.5),
-        "今日のゴール: 調査・要約タスクをClaude Codeに任せられるようになる",
+        "今日のゴール: 面倒な調査タスクを1件、Claude Codeに任せられるようになる",
         font_size=16, color=ACCENT, bold=True
     )
 
@@ -226,102 +226,102 @@ def slide_02_series_overview(prs):
         "第2回は「カスタマイズする」。チームに合わせた設定。\n"
         "第3回は「スケールさせる」。自動化と並列化。\n"
         "同じメンバーが3回とも参加する前提。\n"
-        "今日のゴールは「調査・要約を任せられるようになる」。")
+        "今日のゴールは明確に。「面倒な調査を1件、任せられる」ようになること。")
 
 
 def slide_03_first_step(prs):
-    """最初の1歩は「業務の一部だけ任せる」."""
+    """まずは調査だけ任せてみる."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
 
     add_label(slide, Inches(0.8), Inches(0.4), "PART 1 — Claude Code とは")
     add_text_box(
         slide, Inches(0.8), Inches(0.9), Inches(11), Inches(0.8),
-        "最初の1歩は「業務の一部だけ任せる」",
+        "まずは調査だけ任せてみる",
         font_size=32, color=TEXT_WHITE, bold=True
     )
 
-    # 最初の一歩の例
+    # よくある痛み
     add_text_box(
-        slide, Inches(0.8), Inches(2.0), Inches(6), Inches(0.5),
-        "最初の一歩の例", font_size=20, color=ACCENT, bold=True
-    )
-    add_multiline_text(
-        slide, Inches(1.2), Inches(2.6), Inches(10), Inches(1.2),
-        [
-            "既存チケット1件の「調査・要約・差分整理」だけ任せる",
-            "影響範囲の洗い出しや、ログの要点整理に限定する",
-        ],
-        font_size=18, bullet=True, line_spacing=1.7
+        slide, Inches(0.8), Inches(2.0), Inches(11), Inches(0.5),
+        "よくある痛み: 調査・影響範囲の把握で時間が溶ける",
+        font_size=18, color=TEXT_DIM
     )
 
-    # 痛みと成果
-    pain_y = Inches(4.2)
-    add_shape_bg(slide, Inches(0.8), pain_y, Inches(5.3), Inches(1.0),
+    # Before / After
+    before_y = Inches(2.8)
+    add_shape_bg(slide, Inches(0.8), before_y, Inches(5.3), Inches(2.0),
                  RGBColor(0x2D, 0x1E, 0x1E), 0.03)
     add_text_box(
-        slide, Inches(1.2), pain_y + Inches(0.1), Inches(4.8), Inches(0.35),
-        "よくある痛み", font_size=14, color=RED, bold=True
+        slide, Inches(1.2), before_y + Inches(0.15), Inches(4.8), Inches(0.35),
+        "Before", font_size=16, color=RED, bold=True, font_name=FONT_BODY
     )
     add_text_box(
-        slide, Inches(1.2), pain_y + Inches(0.5), Inches(4.8), Inches(0.4),
-        "調査・影響範囲の把握で時間が溶ける", font_size=17, color=TEXT_LIGHT
+        slide, Inches(1.2), before_y + Inches(0.6), Inches(4.8), Inches(1.2),
+        "チケット1件の調査に30分。\nログを追い、参照箇所を探し、\n影響範囲を整理する",
+        font_size=16, color=TEXT_LIGHT
     )
 
-    add_shape_bg(slide, Inches(6.5), pain_y, Inches(5.5), Inches(1.0),
+    add_shape_bg(slide, Inches(6.5), before_y, Inches(5.8), Inches(2.0),
                  RGBColor(0x1E, 0x2D, 0x1E), 0.03)
     add_text_box(
-        slide, Inches(6.9), pain_y + Inches(0.1), Inches(5.0), Inches(0.35),
-        "小さな成果", font_size=14, color=GREEN, bold=True
+        slide, Inches(6.9), before_y + Inches(0.15), Inches(5.0), Inches(0.35),
+        "After", font_size=16, color=GREEN, bold=True, font_name=FONT_BODY
     )
     add_text_box(
-        slide, Inches(6.9), pain_y + Inches(0.5), Inches(5.0), Inches(0.4),
-        "影響範囲が数分で整理できる", font_size=17, color=TEXT_LIGHT
+        slide, Inches(6.9), before_y + Inches(0.6), Inches(5.0), Inches(1.2),
+        "Claude Codeに任せると数分で返ってくる。\n調査結果・原因候補・影響範囲が\nまとまる",
+        font_size=16, color=TEXT_LIGHT
+    )
+
+    # 入口
+    add_text_box(
+        slide, Inches(0.8), Inches(5.2), Inches(11), Inches(0.5),
+        "入口: 最初は実装ではなく「調査・要約・差分整理」だけ",
+        font_size=18, color=TEXT_LIGHT
     )
 
     # 下部メッセージ
     add_text_box(
         slide, Inches(0.8), Inches(6.0), Inches(11.5), Inches(0.5),
-        "→ いきなり実装させず、業務の一部から始めるのが安全で現実的",
+        "→ いきなり実装させず、業務の一部から始める",
         font_size=18, color=ACCENT, bold=True
     )
 
     add_page_number(slide, 3)
     add_speaker_notes(slide,
-        "まず「業務の一部だけ任せる」という現実的な入口を示す。\n"
         "調査・影響範囲の把握は時間が溶けやすい。ここが最初の狙いどころ。\n"
-        "最初の小さな成果が「影響範囲が数分で整理できる」などの即効性。\n"
-        "いきなり実装させるのではなく、調査・要約・差分整理に限定する。\n"
-        "この範囲なら既存業務と直結し、リスクも低い。\n"
+        "いきなり実装を任せる必要はない。読み取り専用で始められるのでリスクも低い。\n"
+        "Before/Afterは体感の話。人やリポジトリによって差はある。\n"
+        "ただ「調査の時間が減る」のは共通して体感しやすいポイント。\n"
         "この感覚を持ってもらった上で、もう少し詳しく見ていく。")
 
 
 def slide_04_what_is_cc(prs):
-    """Claude Code とは."""
+    """Claude Code でできること."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
 
     add_label(slide, Inches(0.8), Inches(0.4), "PART 1 — Claude Code とは")
     add_text_box(
         slide, Inches(0.8), Inches(0.9), Inches(11), Inches(0.8),
-        "Claude Code とは", font_size=32, color=TEXT_WHITE, bold=True
+        "Claude Code でできること", font_size=32, color=TEXT_WHITE, bold=True
     )
 
     add_multiline_text(
         slide, Inches(0.8), Inches(2.0), Inches(5.5), Inches(4.5),
         [
-            "ターミナル上で動くAIエージェント\n  指示は自然言語でOK",
-            "調査 → 修正 → 検証 → 取りまとめを一連で扱う",
-            "デフォルトは読み取り専用\n  最初はコードを読むだけで安全",
-            "ファイル編集やコマンド実行は都度許可制\n  勝手に変更される心配はない",
-            "「コードを書く」ではなく「作業を進める」ツール",
+            "ターミナルで動くAIエージェント\n  指示は自然言語でOK",
+            "調査 → 計画 → 実装 → 検証 → 取りまとめ\n  を一連で扱う",
+            "デフォルトは読み取り専用\n  ファイル編集やコマンド実行は許可制",
+            "コード補完ではなく「作業を進める」ツール",
         ],
         font_size=18, bullet=True, line_spacing=1.6
     )
 
     # 右側にフロー図
-    flow_y = Inches(2.2)
-    steps = ["調査", "修正", "検証", "要約"]
+    flow_y = Inches(2.0)
+    steps = ["調査", "計画", "実装", "検証", "要約"]
     for i, step in enumerate(steps):
         clr = ACCENT if i == 0 else TEXT_WHITE
         add_shape_bg(
@@ -333,33 +333,32 @@ def slide_04_what_is_cc(prs):
             f"{'→ ' if i > 0 else ''}{step}",
             font_size=20, color=clr, bold=True, alignment=PP_ALIGN.CENTER
         )
-        flow_y += Inches(1.0)
+        flow_y += Inches(0.9)
 
     add_page_number(slide, 4)
     add_speaker_notes(slide,
         "Claude Codeはターミナルベースのエージェント型開発支援ツール。\n"
-        "GitHub Copilotのような単発のコード補完とは違い、\n"
-        "調査・修正・検証・変更内容の取りまとめを、\n"
-        "ひとつのセッション内で連続して扱える。\n"
+        "「AIにコードを書かせるツールでしょ？」と思われがちだが、"
+        "コード生成はできることの一部。\n"
+        "調査、計画、実装、検証、取りまとめを一つのセッションで連続的に扱える。\n"
         "安全面：デフォルトは読み取り専用で、ファイル編集やコマンド実行には"
-        "都度許可が必要。勝手に何か壊す心配はない。\n"
-        "デモGIFがあれば見せる。")
+        "都度許可が必要。勝手に壊す心配はない。")
 
 
 def slide_05_role_comparison(prs):
-    """他ツールとの役割分担."""
+    """ChatGPT・Copilotとの使い分け."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
 
     add_text_box(
         slide, Inches(0.8), Inches(0.5), Inches(11), Inches(0.8),
-        "他ツールとの役割分担", font_size=32, color=TEXT_WHITE, bold=True
+        "ChatGPT・Copilotとの使い分け", font_size=32, color=TEXT_WHITE, bold=True
     )
 
     tools = [
-        ("ChatGPT", "設計議論・仕様の言語化", "設計・壁打ち", RGBColor(0x74, 0xAA, 0x9C)),
-        ("GitHub Copilot", "IDE内のコード補完", "コードを書く", RGBColor(0x79, 0xB8, 0xFF)),
-        ("Claude Code", "リポジトリ全体の作業フロー", "作業を進める", ACCENT),
+        ("ChatGPT", "設計議論・仕様の言語化", "壁打ち", RGBColor(0x74, 0xAA, 0x9C)),
+        ("GitHub Copilot", "IDE内のコード補完", "書く", RGBColor(0x79, 0xB8, 0xFF)),
+        ("Claude Code", "リポジトリ全体の作業フロー", "進める", ACCENT),
     ]
 
     # 「得意領域」ヘッダー
@@ -389,33 +388,34 @@ def slide_05_role_comparison(prs):
 
     add_text_box(
         slide, Inches(0.8), Inches(6.5), Inches(11), Inches(0.5),
-        "→ 排他的ではなく補完的。それぞれの得意領域で使い分けるのがおすすめ",
+        "→ 排他的ではなく補完的。併用するのがおすすめ",
         font_size=16, color=TEXT_DIM
     )
 
     add_page_number(slide, 5)
     add_speaker_notes(slide,
         "3つのツールは競合ではなく補完的。得意領域が異なる。\n"
-        "ChatGPTは設計議論や仕様の言語化が得意。\n"
-        "Copilotはコードを書くことが得意。\n"
-        "Claude Codeは一連の作業を進めることが得意。\n"
-        "IDEで記述し、ターミナル側で調査・実行・差分整理を担当する分担が自然。")
+        "ChatGPTは壁打ちに強い。設計議論、仕様の言語化、アプローチ比較。\n"
+        "Copilotはコードを書くことに強い。IDEから離れずに入力を補助。\n"
+        "Claude Codeは一連の作業フローを進めることに強い。\n"
+        "IDEで記述し、ターミナル側で調査・実行・差分整理という分担が自然。\n"
+        "大事なのは「どれか1つ」ではなく使い分けること。")
 
 
 def slide_06_workflow_shift(prs):
-    """開発フローの変化."""
+    """開発フローがどう変わるか."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
 
     add_text_box(
         slide, Inches(0.8), Inches(0.5), Inches(11), Inches(0.8),
-        "開発フローの変化", font_size=32, color=TEXT_WHITE, bold=True
+        "開発フローがどう変わるか", font_size=32, color=TEXT_WHITE, bold=True
     )
 
     # Column headers
     add_text_box(
         slide, Inches(0.5), Inches(1.3), Inches(5.5), Inches(0.5),
-        "通常の開発フロー", font_size=20, color=ACCENT, bold=True,
+        "従来の開発フロー", font_size=20, color=ACCENT, bold=True,
         alignment=PP_ALIGN.CENTER
     )
     add_text_box(
@@ -527,27 +527,21 @@ def slide_06_workflow_shift(prs):
     # Bottom messages
     add_text_box(
         slide, Inches(0.8), Inches(6.4), Inches(11.5), Inches(0.4),
-        "→ 開発者の役割が「実行者」から「方向づけ + レビュー」に変わる",
+        "→ 開発者の出番は「方向づけ」と「判断」の2回だけになる",
         font_size=18, color=ACCENT, bold=True
-    )
-    add_text_box(
-        slide, Inches(0.8), Inches(6.8), Inches(11.5), Inches(0.4),
-        "→ 介入ポイントは2回だけ（方向づけ / 判断）",
-        font_size=16, color=TEXT_DIM
     )
 
     add_page_number(slide, 6)
     add_speaker_notes(slide,
-        "通常の開発では全工程を自分で回す。\n"
-        "Claude Codeを使うと、開発者の仕事は「何をしたいか伝える」と"
-        "「要所でレビューする」に変わる。\n"
-        "ターミナルだけの話ではない。設計→実装→検証のワークフロー全体が変わる。\n"
-        "これが「コード補完」と「エージェント」の本質的な違い。\n"
-        "次のスライドで、具体的なタスクを例に、この流れを見てみる。")
+        "従来の開発では全工程を自分で回す。6ステップすべてが自分の作業。\n"
+        "Claude Codeを使うと、開発者の出番は2箇所に絞られる。"
+        "最初の方向づけと、途中の判断。\n"
+        "これは「サボる」ではなく「判断に集中する」ということ。\n"
+        "「コード補完」と「エージェント」の本質的な違いはここにある。")
 
 
 def slide_07_task_example(prs):
-    """具体タスクの流れ."""
+    """具体例で見てみる."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
 
@@ -556,11 +550,11 @@ def slide_07_task_example(prs):
 
     add_text_box(
         slide, Inches(0.8), Inches(0.5), Inches(11), Inches(0.8),
-        "実際のタスクで見てみよう", font_size=32, color=TEXT_WHITE, bold=True
+        "具体例で見てみる", font_size=32, color=TEXT_WHITE, bold=True
     )
     add_text_box(
         slide, Inches(0.8), Inches(1.2), Inches(11), Inches(0.5),
-        "例：「ビルド失敗ログを要約し、原因候補を整理する」場合",
+        "例：「CIが落ちた。原因を調査して修正案を出して」",
         font_size=18, color=TEXT_DIM
     )
 
@@ -573,7 +567,7 @@ def slide_07_task_example(prs):
         {
             "role": "Developer",
             "action": "方向づけ",
-            "quote": "\"ビルドが失敗した。\n ログを要約して\n 原因候補を\n 3つ挙げて\"",
+            "quote": "\"CIが落ちた。\n ログを要約して\n 原因候補を\n 3つ挙げて\"",
             "is_dev": True,
         },
         {
@@ -585,13 +579,13 @@ def slide_07_task_example(prs):
         {
             "role": "Developer",
             "action": "判断",
-            "quote": "\"候補2を深掘り\n して。既存仕様は\n 変えない\"",
+            "quote": "\"候補2を深掘り\n して。既存仕様は\n 変えないで\"",
             "is_dev": True,
         },
         {
             "role": "Claude",
             "action": "実行 → 取りまとめ",
-            "quote": "\"根拠と次の確認\n 手順を整理。\n 修正案も添付。\"",
+            "quote": "\"根拠と修正案を\n 整理。テストも\n 追加済み。\"",
             "is_dev": False,
         },
     ]
@@ -630,20 +624,20 @@ def slide_07_task_example(prs):
 
     add_text_box(
         slide, Inches(0.8), Inches(6.3), Inches(11.5), Inches(0.8),
-        "→ 開発者は「何をしたいか」と「判断」に集中する。このあと、その具体的な方法を見ていく",
+        "→ 「丸投げ」ではなく「要所で判断する」。この感覚が重要",
         font_size=18, color=ACCENT, bold=True
     )
 
     add_page_number(slide, 7)
     add_speaker_notes(slide,
         "具体的なタスクで流れを見てみる。\n"
-        "「ビルド失敗ログの要約」という課題をClaude Codeで進める場合。\n"
+        "「CIが落ちた」という日常的なシナリオ。\n"
         "開発者がやるのは、目標を伝えること（30秒）と、計画をレビューすること（1分）。\n"
         "Claudeが調査・計画提案と結果の取りまとめを担当する。\n"
-        "ここで気づいてほしいのは、開発者の介入ポイントが2箇所あること。\n"
-        "「丸投げ」ではなく「要所で判断する」。この感覚が大事。\n"
+        "開発者の介入は2回。方向づけと判断。\n"
+        "「丸投げ」ではない。要所で判断を入れるから品質を保てる。\n"
         "原因調査に30分かかるところが、5分で俯瞰できるイメージ。\n"
-        "PART 2で「伝え方」を、PART 3で「計画の立て方」を詳しく見ていく。")
+        "ここからPART 2で「伝え方のコツ」を見ていく。")
 
 
 def slide_08_section_communication(prs):
@@ -663,27 +657,30 @@ def slide_08_section_communication(prs):
     )
     add_text_box(
         slide, Inches(1.5), Inches(4.0), Inches(10), Inches(1.0),
-        "伝え方によって結果が変わるのは、\n人間相手と同じ",
+        "伝え方で結果が変わるのは、\n人間相手と同じ",
         font_size=24, color=TEXT_LIGHT, alignment=PP_ALIGN.CENTER
     )
 
     add_page_number(slide, 8)
     add_speaker_notes(slide,
-        "先ほどの例で、開発者の発話は2回だけだった。短いが、伝え方で結果は大きく変わる。\n"
-        "ここからPart 2。コミュニケーションの話。\n"
-        "Claude Codeは自然言語で指示を出せるが「何でも伝わる」わけではない。\n"
-        "人間相手と同じで、伝え方によって結果が変わる。")
+        "PART 2。コミュニケーションの話。\n"
+        "先ほどの例で、開発者の発話は2回だけだった。短い。"
+        "でも、伝え方で結果は大きく変わる。\n"
+        "Anthropicのベストプラクティスにも明記されている。\n"
+        "「Claude Codeとの通信方法は、結果の質に大きく影響します」と。\n"
+        "人間相手と同じ。何をしてほしいか明確に伝えないと、"
+        "期待通りの結果は返ってこない。")
 
 
 def slide_09_agent_mental_model(prs):
-    """チャットボット vs エージェント."""
+    """チャットボットとエージェントの違い."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
 
     add_label(slide, Inches(0.8), Inches(0.4), "PART 2 — コミュニケーション")
     add_text_box(
         slide, Inches(0.8), Inches(0.9), Inches(11), Inches(0.8),
-        "チャットボット vs エージェント", font_size=32, color=TEXT_WHITE, bold=True
+        "チャットボットとエージェントの違い", font_size=32, color=TEXT_WHITE, bold=True
     )
 
     # 左: チャットボット
@@ -693,13 +690,16 @@ def slide_09_agent_mental_model(prs):
         slide, Inches(1.2), Inches(2.2), Inches(4.5), Inches(0.5),
         "チャットボット", font_size=22, color=RED, bold=True
     )
+    add_text_box(
+        slide, Inches(1.2), Inches(2.7), Inches(4.5), Inches(0.4),
+        "電話サポートに近い", font_size=15, color=TEXT_DIM
+    )
     add_multiline_text(
-        slide, Inches(1.2), Inches(2.9), Inches(4.5), Inches(3.0),
+        slide, Inches(1.2), Inches(3.3), Inches(4.5), Inches(2.5),
         [
             "質問 → 回答 → 質問 → 回答",
-            "ピンポン型のやりとり",
             "1回のやりとりが完結",
-            "ユーザーが手順を管理する",
+            "ユーザーが手順を考え、\n  1ステップずつ指示する",
         ],
         font_size=16, color=TEXT_LIGHT, bullet=True, line_spacing=1.7
     )
@@ -711,43 +711,48 @@ def slide_09_agent_mental_model(prs):
         slide, Inches(7.4), Inches(2.2), Inches(4.5), Inches(0.5),
         "エージェント（Claude Code）", font_size=22, color=GREEN, bold=True
     )
+    add_text_box(
+        slide, Inches(7.4), Inches(2.7), Inches(4.5), Inches(0.4),
+        "仕事を任せた同僚に近い", font_size=15, color=TEXT_DIM
+    )
     add_multiline_text(
-        slide, Inches(7.4), Inches(2.9), Inches(4.5), Inches(3.0),
+        slide, Inches(7.4), Inches(3.3), Inches(4.5), Inches(2.5),
         [
-            "目標を委任 → 自律的に実行",
-            "ファイル読み書き・コマンド実行",
-            "調査 → 計画 → 実装を一連で行う",
-            "エージェントが手順を判断する",
+            "ゴールを伝えたら自律的に実行",
+            "ファイル読み書き・コマンド実行・\n  Web検索",
+            "調査 → 計画 → 実装を\n  一連で判断・実行する",
         ],
         font_size=16, color=TEXT_LIGHT, bullet=True, line_spacing=1.7
     )
 
     add_text_box(
         slide, Inches(0.8), Inches(6.8), Inches(11.5), Inches(0.5),
-        "→ コミュニケーションの方法も変わる。「指示」ではなく「委任」の意識が重要",
+        "→ 「1行ずつ指示する」のではなく「ゴールと背景を伝えて任せる」",
         font_size=16, color=ACCENT
     )
 
     add_page_number(slide, 9)
     add_speaker_notes(slide,
-        "チャットボットとエージェントの根本的な違い。\n"
-        "チャットボット：ユーザーが1ステップずつ指示する。受動的。\n"
-        "エージェント：ゴールを伝えたら、自分で探索・計画・実行する。自律的。\n"
-        "アナロジー：チャットボットは電話サポート、エージェントは仕事を任せた同僚。\n"
-        "同僚に仕事を任せるとき、1行ずつ何をするか指示しない。\n"
-        "ゴールと背景を伝えて、やり方は任せる。\n"
-        "この「委任」の感覚がClaude Codeでは重要。")
+        "チャットボットとエージェントは根本的に違う。\n"
+        "チャットボットは電話サポートに近い。こちらが1ステップずつ指示して、"
+        "その都度答えが返ってくる。\n"
+        "エージェントは仕事を任せた同僚に近い。ゴールと背景を伝えたら、"
+        "やり方は本人が判断する。\n"
+        "同僚に仕事を任せるとき、1行ずつ「次はこのファイルを開いて、"
+        "次はこの関数を見て」と指示しない。\n"
+        "「CIが落ちてるから原因を調べて」と伝えて、やり方は任せる。\n"
+        "この「委任」の感覚が、Claude Codeではとても重要。")
 
 
 def slide_10_good_instructions(prs):
-    """効果的な指示の4要素."""
+    """指示の出し方."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
 
     add_label(slide, Inches(0.8), Inches(0.4), "PART 2 — コミュニケーション")
     add_text_box(
         slide, Inches(0.8), Inches(0.9), Inches(11), Inches(0.8),
-        "効果的な指示の4要素", font_size=32, color=TEXT_WHITE, bold=True
+        "指示の出し方", font_size=32, color=TEXT_WHITE, bold=True
     )
 
     elements = [
@@ -771,13 +776,6 @@ def slide_10_good_instructions(prs):
         )
         y += Inches(1.05)
 
-    # テンプレ
-    add_text_box(
-        slide, Inches(0.8), y + Inches(0.1), Inches(5.0), Inches(0.4),
-        "テンプレ: 目標 / 背景・制約 / 現状 / 期待する出力",
-        font_size=13, color=TEXT_DIM, font_name=FONT_CODE
-    )
-
     # Bad
     add_text_box(
         slide, Inches(6.5), Inches(1.9), Inches(3), Inches(0.4),
@@ -795,8 +793,8 @@ def slide_10_good_instructions(prs):
     )
     add_code_block(
         slide, Inches(6.5), Inches(4.0), Inches(5.8), Inches(2.6),
-        "ビルドが失敗している。\n"
-        "現状：昨日のリファクタ以降通らなくなった。\n"
+        "CIが落ちている。\n"
+        "現状：昨日のリファクタ以降失敗するようになった。\n"
         "目標：ログを要約し、原因候補を3つ挙げて。\n"
         "調査結果は箇条書きでまとめて。\n"
         "コードの変更はまだしないこと。",
@@ -806,84 +804,31 @@ def slide_10_good_instructions(prs):
     add_page_number(slide, 10)
     add_speaker_notes(slide,
         "指示の4要素：目標、背景・制約、現状、期待する出力。\n"
-        "全部揃っている必要はないが、目標は必須。\n"
-        "悪い例：「この機能を改善して」→ 何を改善？どう改善？が不明。\n"
-        "良い例：Slide 7と同じビルド失敗シナリオ。現状・目標・制約が明確。\n"
+        "全部揃っている必要はない。しかし、目標は必須。\n"
+        "悪い例：「この機能を改善して」。何を？どう？がまったく不明。\n"
+        "良い例：Slide 07と同じCIのシナリオ。現状・目標・制約・出力形式が明確。\n"
+        "「コードの変更はまだしないこと」が地味に大事。"
+        "やってほしくないことを書くと暴走を防げる。\n"
         "ポイント：指示が具体的であるほど、結果も具体的になる。")
 
 
-def slide_11_context_passing(prs):
-    """コンテキストの渡し方."""
+def slide_11_iteration_loop(prs):
+    """たたき台から始める."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
 
     add_label(slide, Inches(0.8), Inches(0.4), "PART 2 — コミュニケーション")
     add_text_box(
         slide, Inches(0.8), Inches(0.9), Inches(11), Inches(0.8),
-        "コンテキストの渡し方", font_size=32, color=TEXT_WHITE, bold=True
+        "たたき台から始める", font_size=32, color=TEXT_WHITE, bold=True
     )
 
-    methods = [
-        ("画像ペースト  *", "スクショやデザインを共有", "エラー画面のキャプチャを貼る"),
-        ("URL指定  *", "Webページを読ませる", "このドキュメントを読んで: https://..."),
-        ("ファイル名を伝える  *", "対象ファイルを明示する", "src/auth.ts を見て"),
-        ("ディレクトリ指定", "Claudeに探索させる", "このディレクトリを調べて"),
-        ("パイプ（上級者向け）", "コマンド出力を渡す", 'cat error.log | claude -p "原因を教えて"'),
-    ]
-
-    y = Inches(2.0)
-    for method, desc, example in methods:
-        add_shape_bg(slide, Inches(0.8), y, Inches(11.5), Inches(0.85),
-                     RGBColor(0x25, 0x22, 0x20), 0.02)
-        add_text_box(
-            slide, Inches(1.3), y + Inches(0.15), Inches(2.8), Inches(0.5),
-            method, font_size=18, color=HIGHLIGHT, bold=True
-        )
-        add_text_box(
-            slide, Inches(4.3), y + Inches(0.15), Inches(3.0), Inches(0.5),
-            desc, font_size=15, color=TEXT_LIGHT
-        )
-        add_text_box(
-            slide, Inches(7.5), y + Inches(0.15), Inches(4.5), Inches(0.5),
-            example, font_size=13, color=TEXT_DIM, font_name=FONT_CODE
-        )
-        y += Inches(0.95)
-
-    # VS Code 注記
-    add_text_box(
-        slide, Inches(0.8), y + Inches(0.2), Inches(11), Inches(0.4),
-        "* まずはこの3つから / VS Code拡張では @ファイル名 でも参照可",
-        font_size=13, color=TEXT_DIM
-    )
-
-    add_page_number(slide, 11)
-    add_speaker_notes(slide,
-        "コンテキストを渡す方法はいくつかある。\n"
-        "迷ったら「画像・URL・ファイル名」の3つから始めればOK。\n"
-        "画像もコピー＆ペーストで渡せる。エラー画面やデザインカンプなど。\n"
-        "URLを渡してWebページを読ませることもできる。\n"
-        "ファイル名を伝えて対象を明示する方法は基本的。VS Code拡張なら@記法も使える。\n"
-        "パイプでコマンド出力を渡す方法は上級者向け。ログ分析などに便利。"
-        "-p フラグでプロンプトも一緒に渡せる。\n"
-        "ディレクトリ指定でClaude自身に探索させることも可能。")
-
-
-def slide_12_iteration_loop(prs):
-    """たたき台→改善ループ."""
-    slide = prs.slides.add_slide(prs.slide_layouts[6])
-    set_slide_bg(slide, BG_DARK)
-
-    add_label(slide, Inches(0.8), Inches(0.4), "PART 2 — コミュニケーション")
-    add_text_box(
-        slide, Inches(0.8), Inches(0.9), Inches(11), Inches(0.8),
-        "たたき台 → 改善ループ", font_size=32, color=TEXT_WHITE, bold=True
-    )
-
+    # ループ図（横4ステップ）
     steps_loop = [
         ("1. 指示を出す", ACCENT),
-        ("2. 出力を確認する", TEXT_WHITE),
-        ("3. 具体的にフィードバック", GREEN),
-        ("4. 改善版を受け取る", TEXT_WHITE),
+        ("2. 出力を確認", TEXT_WHITE),
+        ("3. フィードバック", GREEN),
+        ("4. 改善版", TEXT_WHITE),
     ]
 
     x = Inches(0.8)
@@ -896,41 +841,55 @@ def slide_12_iteration_loop(prs):
         )
         x += Inches(3.0)
 
+    # 3つのテクニック
     add_text_box(
         slide, Inches(0.8), Inches(3.5), Inches(11), Inches(0.5),
-        "実践テクニック", font_size=22, color=TEXT_WHITE, bold=True
+        "3つのテクニック", font_size=22, color=TEXT_WHITE, bold=True
     )
 
     tips = [
-        ("「なぜ」を聞く", "期待と違う動きをしたら、すぐ修正を指示する前に理由を聞く"),
-        ("提案形式で伝える", "「Xをして」より「Xを考えているが、どう思うか」"),
-        ("手直ししたら伝える", "自分で編集した場合はClaudeに共有する"),
-        ("初回で完璧を求めない", "「全然違う」より「この部分は良い、ここを変えて」"),
+        ("「なぜ」を聞く",
+         "期待と違ったら、修正指示の前に理由を聞く。\n自分の指示の問題が見えることがある"),
+        ("提案形式で伝える",
+         "「Xをして」より「Xを考えているが、どう思うか」。\n別の選択肢が出てくる"),
+        ("手直ししたら伝える",
+         "自分で編集した場合はClaudeに共有する。\n伝えないと古い状態で動き続ける"),
     ]
 
     y = Inches(4.2)
-    for title, desc in tips:
+    for i, (title, desc) in enumerate(tips):
+        add_shape_bg(slide, Inches(0.8), y, Inches(11.5), Inches(1.1),
+                     RGBColor(0x25, 0x22, 0x20), 0.02)
         add_text_box(
-            slide, Inches(1.2), y, Inches(3.5), Inches(0.5),
-            title, font_size=17, color=HIGHLIGHT, bold=True
+            slide, Inches(1.3), y + Inches(0.1), Inches(3.0), Inches(0.5),
+            title, font_size=18, color=HIGHLIGHT, bold=True
         )
         add_text_box(
-            slide, Inches(5.0), y, Inches(7.0), Inches(0.5),
-            desc, font_size=15, color=TEXT_LIGHT
+            slide, Inches(4.5), y + Inches(0.1), Inches(7.5), Inches(0.9),
+            desc, font_size=14, color=TEXT_LIGHT
         )
-        y += Inches(0.7)
+        y += Inches(1.2)
 
-    add_page_number(slide, 12)
+    add_text_box(
+        slide, Inches(0.8), Inches(6.9), Inches(11.5), Inches(0.4),
+        "→ 「全然違う」より「この部分は良い、ここを変えて」",
+        font_size=16, color=ACCENT
+    )
+
+    add_page_number(slide, 11)
     add_speaker_notes(slide,
-        "最初から完璧を求めず、たたき台→改善のループで進める。\n"
-        "テクニック：\n"
-        "- 「なぜそうしたのか」と聞くと、自分の指示の問題が見えることがある\n"
-        "- 提案形式で伝えると、Claudeが別の選択肢を出してくれる\n"
-        "- 自分で直接コードを編集したら、その旨を伝える。伝えないと古い状態を前提に動く\n"
-        "- 「全然違う」と言うより「この部分は良い、この部分は変えて」と具体的に")
+        "最初から完璧を求めない。これが一番大事なマインドセット。\n"
+        "まず出力を見て、良い点と悪い点を具体的にフィードバックし、"
+        "改善版を出してもらう。\n"
+        "テクニック3つ。\n"
+        "1つ目：「なぜそうしたのか」と聞く。自分の指示に問題があったケースも多い。\n"
+        "2つ目：命令ではなく提案。「Xを考えているが、どう思うか」と聞くと、"
+        "自分では気づかなかった選択肢が出てくる。\n"
+        "3つ目：自分でコードを直接編集したら、必ずClaudeに伝える。"
+        "伝えないと古い状態を前提に動いてしまう。")
 
 
-def slide_13_section_plan_mode(prs):
+def slide_12_section_plan_mode(prs):
     """セクション区切り — Plan Mode."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_SECTION)
@@ -951,14 +910,16 @@ def slide_13_section_plan_mode(prs):
         font_size=24, color=TEXT_LIGHT, alignment=PP_ALIGN.CENTER
     )
 
-    add_page_number(slide, 13)
+    add_page_number(slide, 12)
     add_speaker_notes(slide,
         "Part 3。Plan Modeの話。\n"
-        "「いきなりコードを書かせない」が合言葉。\n"
-        "計画から始めることで手戻りを減らせる。")
+        "「いきなりコードを書かせない」。これが合言葉。\n"
+        "ここまでのPART 1-2で「何ができるか」と「どう伝えるか」を見てきた。\n"
+        "PART 3は「どう進めるか」。ワークフローの話。\n"
+        "計画から始めることで手戻りを大幅に減らせる。")
 
 
-def slide_14_plan_mode_what(prs):
+def slide_13_plan_mode_what(prs):
     """Plan Mode とは."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
@@ -973,23 +934,23 @@ def slide_14_plan_mode_what(prs):
     add_multiline_text(
         slide, Inches(0.8), Inches(2.0), Inches(5.5), Inches(2.8),
         [
-            "読み取り専用の実行モード",
-            "ファイル閲覧・検索は可能\n  Webアクセスは権限設定次第",
+            "読み取り専用のモード",
+            "ファイル閲覧・検索・Web検索は可能",
             "ファイル編集・コマンド実行は不可",
             "調査と計画立案に集中するためのモード",
         ],
         font_size=18, bullet=True, line_spacing=1.6
     )
 
-    # ポイント
+    # なぜ計画から始めるのか
     add_text_box(
         slide, Inches(7.0), Inches(2.0), Inches(5), Inches(0.5),
-        "ポイント", font_size=20, color=ACCENT, bold=True
+        "なぜ計画から始めるのか", font_size=20, color=ACCENT, bold=True
     )
     points = [
-        "まずPlan Modeで調査・計画を固める",
-        "実装はレビュー後に許可する",
-        "最初はPlan Mode固定にする",
+        "計画段階で認識のズレに気づける",
+        "コードを壊すリスクがゼロ",
+        "手戻りを最小限にしてから実装に入れる",
     ]
     y = Inches(2.7)
     for pt in points:
@@ -1001,43 +962,45 @@ def slide_14_plan_mode_what(prs):
         )
         y += Inches(0.95)
 
-    # 効果
+    # 操作方法
     add_text_box(
         slide, Inches(0.8), Inches(5.2), Inches(6), Inches(0.5),
-        "なぜ Plan Mode から始めるのか", font_size=20, color=ACCENT, bold=True
+        "操作方法", font_size=20, color=ACCENT, bold=True
     )
     add_multiline_text(
         slide, Inches(1.2), Inches(5.8), Inches(10), Inches(1.3),
         [
-            "計画段階で認識のズレに気づける",
-            "コードを壊すリスクがゼロ",
-            "手戻りを最小限にしてから実装に入れる",
+            "Shift+Tab で切替（Normal → Auto Accept → Plan）",
+            "claude --permission-mode plan で起動",
         ],
         font_size=16, bullet=True, line_spacing=1.5
     )
 
-    add_page_number(slide, 14)
+    add_page_number(slide, 13)
     add_speaker_notes(slide,
-        "Plan Modeは読み取り専用のモード。\n"
-        "まずPlan Modeで方針を固め、実装はレビュー後に許可する。\n"
-        "最初はPlan Mode固定で始めると失敗しにくい。\n"
-        "操作方法：セッション中はShift+TabかAlt+Mで切替。\n"
-        "起動時に --permission-mode plan で指定もできる。\n"
+        "Plan Modeは読み取り専用。ファイルを見たり検索はできるが、"
+        "編集やコマンド実行はできない。\n"
+        "なぜ計画から始めるのか。Anthropicのベストプラクティスにも明記されている。\n"
+        "「ステップ1-2は重要。これがないと、Claudeは直接コーディングに"
+        "飛び込む傾向がある」と。\n"
+        "計画なしで実装を始めると、前提の認識ズレで根本から作り直しになることがある。\n"
+        "Plan Modeなら壊すリスクはゼロ。安心して調査・計画できる。\n"
+        "操作はShift+Tabで切替。起動時に --permission-mode plan で指定もできる。\n"
         "Extended Thinkingとは別の概念。\n"
-        "Extended Thinking = 深く考えさせる（think, think hard）\n"
-        "Plan Mode = 使えるツールを制限する\n"
+        "Extended Thinking = 深く考えさせる（think, think hard）。"
+        "Plan Mode = ツール制限。\n"
         "両者の併用も可能。")
 
 
-def slide_15_plan_mode_workflow(prs):
-    """実践ワークフロー."""
+def slide_14_plan_mode_workflow(prs):
+    """Plan Mode の実践ワークフロー."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
 
     add_label(slide, Inches(0.8), Inches(0.4), "PART 3 — Plan Mode")
     add_text_box(
         slide, Inches(0.8), Inches(0.9), Inches(11), Inches(0.8),
-        "実践ワークフロー", font_size=32, color=TEXT_WHITE, bold=True
+        "Plan Mode の実践ワークフロー", font_size=32, color=TEXT_WHITE, bold=True
     )
 
     steps = [
@@ -1047,112 +1010,172 @@ def slide_15_plan_mode_workflow(prs):
         ("Step 2", "計画をレビュー",
          "「後方互換性はどうする？」「テストは？」",
          "不明点をつぶし、計画を確定する", HIGHLIGHT),
-        ("Step 3", "必要に応じて実装を許可",
+        ("Step 3", "実装を許可",
          "「OK、実装して」/ 調査だけならここで完了",
          "計画に沿って実装、または調査結果を活用", ACCENT),
-        ("Step 4", "結果を確認・コミット",
+        ("Step 4", "結果を確認",
          "テスト実行 → PR作成",
          "変更内容を取りまとめて完了", TEXT_WHITE),
     ]
 
-    y = Inches(2.0)
+    y = Inches(1.9)
     for step, title, instruction, desc, color in steps:
-        add_shape_bg(slide, Inches(0.8), y, Inches(11.5), Inches(1.1),
-                     RGBColor(0x25, 0x22, 0x20), 0.02)
-        add_text_box(
-            slide, Inches(1.2), y + Inches(0.08), Inches(1.2), Inches(0.4),
-            step, font_size=14, color=color, bold=True, font_name=FONT_BODY
-        )
-        add_text_box(
-            slide, Inches(2.5), y + Inches(0.08), Inches(3.5), Inches(0.4),
-            title, font_size=17, color=TEXT_WHITE, bold=True
-        )
-        add_text_box(
-            slide, Inches(1.2), y + Inches(0.55), Inches(5.0), Inches(0.4),
-            instruction, font_size=13, color=HIGHLIGHT, font_name=FONT_CODE
-        )
-        add_text_box(
-            slide, Inches(7.0), y + Inches(0.3), Inches(5.0), Inches(0.5),
-            desc, font_size=14, color=TEXT_LIGHT
-        )
-        y += Inches(1.25)
-
-    add_page_number(slide, 15)
-    add_speaker_notes(slide,
-        "計画 → レビュー → 実装 → 確認の4ステップ。\n"
-        "ポイント：\n"
-        "- 「まだコードを書かないで」と明示的に伝える\n"
-        "- 計画段階で疑問点をつぶす。「後方互換性は？」「テストは？」\n"
-        "- 計画に納得したらモード切替で実装を許可\n"
-        "- 小さな修正でもこの流れを習慣にすると手戻りが減る")
-
-
-def slide_16_plan_mode_confirm(prs):
-    """計画段階のチェックリスト."""
-    slide = prs.slides.add_slide(prs.slide_layouts[6])
-    set_slide_bg(slide, BG_DARK)
-
-    add_label(slide, Inches(0.8), Inches(0.4), "PART 3 — Plan Mode")
-    add_text_box(
-        slide, Inches(0.8), Inches(0.9), Inches(11), Inches(0.8),
-        "計画段階のチェックリスト", font_size=32, color=TEXT_WHITE, bold=True
-    )
-
-    items = [
-        ("ゴール", "何を達成したいか"),
-        ("背景・制約", "なぜ必要か / やってはいけないこと"),
-        ("受け入れ基準", "どうなったら完了か"),
-        ("禁止事項", "絶対にやってはいけない変更"),
-        ("想定外の扱い", "計画外の問題が見つかったらどうするか"),
-    ]
-
-    y = Inches(2.0)
-    for item, desc in items:
         add_shape_bg(slide, Inches(0.8), y, Inches(11.5), Inches(0.9),
                      RGBColor(0x25, 0x22, 0x20), 0.02)
         add_text_box(
-            slide, Inches(1.3), y + Inches(0.18), Inches(3.0), Inches(0.5),
-            item, font_size=20, color=GREEN, bold=True
+            slide, Inches(1.2), y + Inches(0.05), Inches(1.2), Inches(0.4),
+            step, font_size=14, color=color, bold=True, font_name=FONT_BODY
         )
         add_text_box(
-            slide, Inches(5.0), y + Inches(0.18), Inches(7.0), Inches(0.5),
-            desc, font_size=17, color=TEXT_LIGHT
+            slide, Inches(2.5), y + Inches(0.05), Inches(3.5), Inches(0.4),
+            title, font_size=17, color=TEXT_WHITE, bold=True
         )
-        y += Inches(1.0)
+        add_text_box(
+            slide, Inches(1.2), y + Inches(0.48), Inches(5.0), Inches(0.4),
+            instruction, font_size=13, color=HIGHLIGHT, font_name=FONT_CODE
+        )
+        add_text_box(
+            slide, Inches(7.0), y + Inches(0.25), Inches(5.0), Inches(0.5),
+            desc, font_size=14, color=TEXT_LIGHT
+        )
+        y += Inches(1.05)
 
+    # Step 1で伝えておくと良いこと
     add_text_box(
-        slide, Inches(0.8), Inches(6.8), Inches(11.5), Inches(0.5),
-        "→ これらが曖昧なまま実装に入ると、後から認識のズレが表面化する",
-        font_size=16, color=ACCENT
+        slide, Inches(0.8), Inches(6.0), Inches(5), Inches(0.4),
+        "Step 1で伝えておくと良いこと", font_size=15, color=ACCENT, bold=True
     )
+    checklist_items = [
+        ("受け入れ基準", "どうなったら完了か"),
+        ("禁止事項", "絶対にやってはいけない変更"),
+        ("想定外の扱い", "計画にない問題を見つけたらどうするか"),
+    ]
+    x = Inches(0.8)
+    for item, desc in checklist_items:
+        add_shape_bg(slide, x, Inches(6.5), Inches(3.6), Inches(0.7),
+                     RGBColor(0x25, 0x22, 0x20), 0.03)
+        add_text_box(
+            slide, x + Inches(0.15), Inches(6.53), Inches(3.3), Inches(0.3),
+            item, font_size=13, color=GREEN, bold=True
+        )
+        add_text_box(
+            slide, x + Inches(0.15), Inches(6.85), Inches(3.3), Inches(0.3),
+            desc, font_size=11, color=TEXT_DIM
+        )
+        x += Inches(3.8)
 
-    add_page_number(slide, 16)
+    add_page_number(slide, 14)
     add_speaker_notes(slide,
-        "計画段階で確認すべき5つの項目。\n"
-        "ゴール：何を達成したいか。最も重要。\n"
-        "背景・制約：なぜ必要か。技術的な制約も含む。\n"
-        "受け入れ基準：どうなったら完了か。テストが通る、レビューOKなど。\n"
-        "禁止事項：既存APIの破壊、特定ファイルの変更禁止など。\n"
-        "想定外の扱い：計画外の問題は報告して止まる、自己判断で対処、など。")
+        "4ステップのワークフロー。\n"
+        "Step 1：「計画を立てて。実装はまだしないで。」この一言が鍵。\n"
+        "このとき、受け入れ基準・禁止事項・想定外の扱いも伝えておくとブレない。\n"
+        "例えば「既存APIは壊さない」「計画にない問題を見つけたら報告して止まって」など。\n"
+        "Step 2：計画が返ってきたらレビューする。"
+        "「後方互換性は？」「テストは？」と聞く。\n"
+        "Step 3：計画に納得したら「OK、実装して」。"
+        "調査だけが目的ならここで完了。\n"
+        "Step 4：テストを実行し、結果を確認してコミット。\n"
+        "小さな修正でもこの流れを習慣にすると手戻りが劇的に減る。")
 
 
-def slide_17_summary(prs):
-    """まとめ."""
+def slide_15_getting_started(prs):
+    """始め方."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
 
     add_text_box(
         slide, Inches(0.8), Inches(0.5), Inches(11), Inches(0.8),
-        "まとめ", font_size=36, color=TEXT_WHITE, bold=True
+        "始め方", font_size=36, color=TEXT_WHITE, bold=True
+    )
+
+    # インストール
+    add_text_box(
+        slide, Inches(0.8), Inches(1.5), Inches(3), Inches(0.5),
+        "インストール", font_size=20, color=ACCENT, bold=True
+    )
+    add_code_block(
+        slide, Inches(0.8), Inches(2.1), Inches(5.5), Inches(1.6),
+        "# Mac\n"
+        "curl -fsSL https://claude.ai/install.sh | bash\n"
+        "\n"
+        "# Windows\n"
+        "winget install Anthropic.ClaudeCode",
+        font_size=13
+    )
+
+    # 起動
+    add_text_box(
+        slide, Inches(7.0), Inches(1.5), Inches(5), Inches(0.5),
+        "起動", font_size=20, color=ACCENT, bold=True
+    )
+    add_text_box(
+        slide, Inches(7.0), Inches(2.1), Inches(5), Inches(0.5),
+        "対象リポジトリで claude を実行",
+        font_size=16, color=TEXT_LIGHT
+    )
+
+    # 権限設定
+    add_text_box(
+        slide, Inches(7.0), Inches(2.9), Inches(5), Inches(0.5),
+        "権限設定", font_size=20, color=ACCENT, bold=True
+    )
+    add_text_box(
+        slide, Inches(7.0), Inches(3.4), Inches(5), Inches(0.8),
+        "/config で確認・変更\n最初は Plan Mode 固定がおすすめ",
+        font_size=15, color=TEXT_LIGHT
+    )
+
+    # 最初のタスク例
+    add_text_box(
+        slide, Inches(0.8), Inches(4.3), Inches(11), Inches(0.5),
+        "最初のタスク例", font_size=20, color=ACCENT, bold=True
+    )
+
+    tasks = [
+        "「このリポジトリの構成を要約して」",
+        "「テストを実行して、失敗しているケースがあれば原因を教えて」",
+        "「この関数の参照箇所を全部列挙して」",
+    ]
+
+    y = Inches(4.9)
+    for task in tasks:
+        add_shape_bg(slide, Inches(0.8), y, Inches(11.5), Inches(0.7),
+                     RGBColor(0x25, 0x22, 0x20), 0.02)
+        add_text_box(
+            slide, Inches(1.3), y + Inches(0.12), Inches(10.5), Inches(0.5),
+            task, font_size=16, color=HIGHLIGHT, font_name=FONT_CODE
+        )
+        y += Inches(0.8)
+
+    add_page_number(slide, 15)
+    add_speaker_notes(slide,
+        "実際に使い始める手順。\n"
+        "インストールはワンライナー。自動更新されるので常に最新版。\n"
+        "対象リポジトリのディレクトリで claude を実行するだけ。"
+        "初回は認証設定が求められる。\n"
+        "最初のタスクは結果がわかりやすいものが良い。\n"
+        "リポジトリの要約、テスト実行、参照箇所の列挙など。\n"
+        "権限設定は /config で確認できる。"
+        "最初はPlan Mode固定で始めると安全。")
+
+
+def slide_16_summary(prs):
+    """まとめ / 次回予告."""
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    set_slide_bg(slide, BG_DARK)
+
+    add_text_box(
+        slide, Inches(0.8), Inches(0.5), Inches(11), Inches(0.8),
+        "まとめ / 次回予告", font_size=36, color=TEXT_WHITE, bold=True
     )
 
     takeaways = [
-        ("Claude Code は「作業を進める」ツール",
-         "コード補完ではなく、調査→修正→検証→取りまとめの一連フロー"),
-        ("伝え方が結果を左右する",
-         "目標・背景・現状・期待出力を明確にし、たたき台→改善ループで進める"),
-        ("計画から始める習慣をつける",
-         "Plan Mode で方針を固めてから実装に入ると手戻りが減る"),
+        ("Claude Code はコード補完ではなく\n「作業を進める」ツール",
+         "調査→計画→実装→検証→取りまとめの一連フロー"),
+        ("伝え方で結果が変わる",
+         "目標・背景・現状・期待出力を伝え、たたき台→改善ループで進める"),
+        ("いきなりコードを書かせない",
+         "Plan Modeで方針を固めてから実装に入る"),
     ]
 
     y = Inches(1.6)
@@ -1169,17 +1192,27 @@ def slide_17_summary(prs):
             title, font_size=20, color=TEXT_WHITE, bold=True
         )
         add_text_box(
-            slide, Inches(2.0), y + Inches(0.6), Inches(9.5), Inches(0.5),
+            slide, Inches(2.0), y + Inches(0.65), Inches(9.5), Inches(0.5),
             desc, font_size=15, color=TEXT_LIGHT
         )
         y += Inches(1.4)
 
-    add_page_number(slide, 17)
+    # CTA
+    add_text_box(
+        slide, Inches(0.8), Inches(6.0), Inches(11.5), Inches(0.5),
+        "面倒な調査タスクを1件、Claude Codeに任せてみてください",
+        font_size=18, color=ACCENT, bold=True
+    )
+
+    add_page_number(slide, 16)
     add_speaker_notes(slide,
-        "まとめの3つの要点を読み上げ。\n"
-        "今日の持ち帰りは「面倒な調査を、まず任せる」。\n"
-        "次回は「カスタマイズする」がテーマ。\n"
-        "コンテキスト管理、Skills、サブエージェント、Plan Modeの深掘りを扱う。\n"
+        "まとめ。今日の持ち帰りは3つ。\n"
+        "1つ目：Claude Codeはコード補完ではなく「作業を進める」ツール。\n"
+        "2つ目：伝え方で結果が変わる。目標・背景・現状・期待出力を伝える。\n"
+        "3つ目：いきなりコードを書かせない。Plan Modeで方針を固めてから実装に入る。\n"
+        "面倒な調査タスクを1件、任せてみてほしい。\n"
+        "次回は「カスタマイズする」がテーマ。"
+        "コンテキスト管理、Skills、サブエージェント。\n"
         "質疑応答の時間へ。")
 
 
@@ -1200,13 +1233,12 @@ def main():
     slide_08_section_communication(prs)
     slide_09_agent_mental_model(prs)
     slide_10_good_instructions(prs)
-    slide_11_context_passing(prs)
-    slide_12_iteration_loop(prs)
-    slide_13_section_plan_mode(prs)
-    slide_14_plan_mode_what(prs)
-    slide_15_plan_mode_workflow(prs)
-    slide_16_plan_mode_confirm(prs)
-    slide_17_summary(prs)
+    slide_11_iteration_loop(prs)
+    slide_12_section_plan_mode(prs)
+    slide_13_plan_mode_what(prs)
+    slide_14_plan_mode_workflow(prs)
+    slide_15_getting_started(prs)
+    slide_16_summary(prs)
 
     output_path = "slides/session1.pptx"
     prs.save(output_path)
