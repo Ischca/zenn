@@ -30,7 +30,7 @@ FONT_JP = "Hiragino Sans"
 
 SLIDE_W = Inches(13.333)
 SLIDE_H = Inches(7.5)
-TOTAL = 16
+TOTAL = 15
 
 
 def set_slide_bg(slide, color):
@@ -188,8 +188,8 @@ def slide_02_series_overview(prs):
 
     sessions = [
         ("第1回（今日）", "理解する", "基本 / コミュニケーション / Plan Mode", True),
-        ("第2回", "カスタマイズする", "コンテキスト管理 / Skills / サブエージェント", False),
-        ("第3回", "スケールさせる", "Hooks / MCP / worktree / /insights", False),
+        ("第2回", "プロジェクトに合わせた\nカスタマイズ", "CLAUDE.md / Skills / Hooks", False),
+        ("第3回", "外部連携と並列開発", "MCP / worktree / サブエージェント", False),
     ]
 
     y = Inches(1.6)
@@ -215,7 +215,7 @@ def slide_02_series_overview(prs):
     # 今日のゴール
     add_text_box(
         slide, Inches(0.8), Inches(6.3), Inches(11.5), Inches(0.5),
-        "今日のゴール: 面倒な調査タスクを1件、Claude Codeに任せられるようになる",
+        "今日のゴール: 日常業務の一部をClaude Codeに任せられるようになる",
         font_size=16, color=ACCENT, bold=True
     )
 
@@ -223,10 +223,10 @@ def slide_02_series_overview(prs):
     add_speaker_notes(slide,
         "3回シリーズの構成を説明。\n"
         "第1回は「理解する」。Claude Codeとは何か、どう使うかの基本。\n"
-        "第2回は「カスタマイズする」。チームに合わせた設定。\n"
-        "第3回は「スケールさせる」。自動化と並列化。\n"
+        "第2回は「プロジェクトに合わせたカスタマイズ」。CLAUDE.md、Skills、Hooks。\n"
+        "第3回は「外部連携と並列開発」。MCP、worktree、サブエージェント。\n"
         "同じメンバーが3回とも参加する前提。\n"
-        "今日のゴールは明確に。「面倒な調査を1件、任せられる」ようになること。")
+        "今日のゴールは「日常業務の一部を任せられる」ようになること。")
 
 
 def slide_03_first_step(prs):
@@ -1078,88 +1078,7 @@ def slide_14_plan_mode_workflow(prs):
         "小さな修正でもこの流れを習慣にすると手戻りが劇的に減る。")
 
 
-def slide_15_getting_started(prs):
-    """始め方."""
-    slide = prs.slides.add_slide(prs.slide_layouts[6])
-    set_slide_bg(slide, BG_DARK)
-
-    add_text_box(
-        slide, Inches(0.8), Inches(0.5), Inches(11), Inches(0.8),
-        "始め方", font_size=36, color=TEXT_WHITE, bold=True
-    )
-
-    # インストール
-    add_text_box(
-        slide, Inches(0.8), Inches(1.5), Inches(3), Inches(0.5),
-        "インストール", font_size=20, color=ACCENT, bold=True
-    )
-    add_code_block(
-        slide, Inches(0.8), Inches(2.1), Inches(5.5), Inches(1.6),
-        "# Mac\n"
-        "curl -fsSL https://claude.ai/install.sh | bash\n"
-        "\n"
-        "# Windows\n"
-        "winget install Anthropic.ClaudeCode",
-        font_size=13
-    )
-
-    # 起動
-    add_text_box(
-        slide, Inches(7.0), Inches(1.5), Inches(5), Inches(0.5),
-        "起動", font_size=20, color=ACCENT, bold=True
-    )
-    add_text_box(
-        slide, Inches(7.0), Inches(2.1), Inches(5), Inches(0.5),
-        "対象リポジトリで claude を実行",
-        font_size=16, color=TEXT_LIGHT
-    )
-
-    # 権限設定
-    add_text_box(
-        slide, Inches(7.0), Inches(2.9), Inches(5), Inches(0.5),
-        "権限設定", font_size=20, color=ACCENT, bold=True
-    )
-    add_text_box(
-        slide, Inches(7.0), Inches(3.4), Inches(5), Inches(0.8),
-        "/config で確認・変更\n最初は Plan Mode 固定がおすすめ",
-        font_size=15, color=TEXT_LIGHT
-    )
-
-    # 最初のタスク例
-    add_text_box(
-        slide, Inches(0.8), Inches(4.3), Inches(11), Inches(0.5),
-        "最初のタスク例", font_size=20, color=ACCENT, bold=True
-    )
-
-    tasks = [
-        "「このリポジトリの構成を要約して」",
-        "「テストを実行して、失敗しているケースがあれば原因を教えて」",
-        "「この関数の参照箇所を全部列挙して」",
-    ]
-
-    y = Inches(4.9)
-    for task in tasks:
-        add_shape_bg(slide, Inches(0.8), y, Inches(11.5), Inches(0.7),
-                     RGBColor(0x25, 0x22, 0x20), 0.02)
-        add_text_box(
-            slide, Inches(1.3), y + Inches(0.12), Inches(10.5), Inches(0.5),
-            task, font_size=16, color=HIGHLIGHT, font_name=FONT_CODE
-        )
-        y += Inches(0.8)
-
-    add_page_number(slide, 15)
-    add_speaker_notes(slide,
-        "実際に使い始める手順。\n"
-        "インストールはワンライナー。自動更新されるので常に最新版。\n"
-        "対象リポジトリのディレクトリで claude を実行するだけ。"
-        "初回は認証設定が求められる。\n"
-        "最初のタスクは結果がわかりやすいものが良い。\n"
-        "リポジトリの要約、テスト実行、参照箇所の列挙など。\n"
-        "権限設定は /config で確認できる。"
-        "最初はPlan Mode固定で始めると安全。")
-
-
-def slide_16_summary(prs):
+def slide_15_summary(prs):
     """まとめ / 次回予告."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
@@ -1200,19 +1119,19 @@ def slide_16_summary(prs):
     # CTA
     add_text_box(
         slide, Inches(0.8), Inches(6.0), Inches(11.5), Inches(0.5),
-        "面倒な調査タスクを1件、Claude Codeに任せてみてください",
+        "日常業務の一部を、Claude Codeに任せてみてください",
         font_size=18, color=ACCENT, bold=True
     )
 
-    add_page_number(slide, 16)
+    add_page_number(slide, 15)
     add_speaker_notes(slide,
         "まとめ。今日の持ち帰りは3つ。\n"
         "1つ目：Claude Codeはコード補完ではなく「作業を進める」ツール。\n"
         "2つ目：伝え方で結果が変わる。目標・背景・現状・期待出力を伝える。\n"
         "3つ目：いきなりコードを書かせない。Plan Modeで方針を固めてから実装に入る。\n"
-        "面倒な調査タスクを1件、任せてみてほしい。\n"
-        "次回は「カスタマイズする」がテーマ。"
-        "コンテキスト管理、Skills、サブエージェント。\n"
+        "日常業務の一部を、まず任せてみてほしい。\n"
+        "次回は「プロジェクトに合わせたカスタマイズ」。"
+        "CLAUDE.md、Skills、Hooks。\n"
         "質疑応答の時間へ。")
 
 
@@ -1237,8 +1156,7 @@ def main():
     slide_12_section_plan_mode(prs)
     slide_13_plan_mode_what(prs)
     slide_14_plan_mode_workflow(prs)
-    slide_15_getting_started(prs)
-    slide_16_summary(prs)
+    slide_15_summary(prs)
 
     output_path = "slides/session1.pptx"
     prs.save(output_path)
