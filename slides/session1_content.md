@@ -106,7 +106,7 @@ Claude Codeはターミナルベースのエージェント型開発支援ツー
 
 ```
 say "完了しました"           # 音声で通知
-python generate_slides.py    # スライド生成
+marp slides.md --pptx        # スライド生成
 ffmpeg -i video.mp4 out.gif  # 動画をGIFに変換
 git log --oneline -10        # 直近のコミットを確認
 npm test                     # テスト実行
@@ -122,6 +122,7 @@ Claude Codeが使えるツールを見てみる。
 テストやビルドはもちろん、たとえば音声で通知を鳴らす、Pythonスクリプトでスライドを生成する、ffmpegで動画を変換する。こういったことも全部Bashツールの守備範囲。
 つまり「ターミナルでコマンドを叩けばできること」は、原理的にすべてClaude Codeに任せられる。
 どのツールを使うかは指定不要。指示に応じてClaude Codeが自動で組み合わせる。
+ちなみにスライド上ではgitを例にしているが、PerforceやSVNなど、コマンドラインから操作できるツールなら同じように使える。普段の開発環境がそのまま活きる。
 
 ---
 
