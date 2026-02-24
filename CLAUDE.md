@@ -15,6 +15,16 @@ npm run lint         # textlintで記事をチェック
 npm run lint:fix     # textlintで自動修正
 ```
 
+## Python
+
+Python を使う場合は必ず `uv` を使う（pip は使わない）。
+
+```bash
+uv run script.py           # スクリプト実行
+uv add <package>            # 依存追加
+uv pip install <package>    # どうしても pip 互換が必要な場合
+```
+
 ## 構成
 
 - `articles/` - 記事（Markdown）
