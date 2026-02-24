@@ -30,7 +30,7 @@ FONT_JP = "Hiragino Sans"
 
 SLIDE_W = Inches(13.333)
 SLIDE_H = Inches(7.5)
-TOTAL = 15
+TOTAL = 16
 
 
 def set_slide_bg(slide, color):
@@ -345,7 +345,81 @@ def slide_04_what_is_cc(prs):
         "都度許可が必要。勝手に壊す心配はない。")
 
 
-def slide_05_role_comparison(prs):
+def slide_05_tools(prs):
+    """Claude Code のツール群."""
+    slide = prs.slides.add_slide(prs.slide_layouts[6])
+    set_slide_bg(slide, BG_DARK)
+
+    add_label(slide, Inches(0.8), Inches(0.4), "PART 1 — Claude Code とは")
+    add_text_box(
+        slide, Inches(0.8), Inches(0.9), Inches(11), Inches(0.8),
+        "Claude Code のツール群", font_size=32, color=TEXT_WHITE, bold=True
+    )
+
+    # 基本ツール（上段・4カード横並び）
+    basic_tools = [
+        ("Read / Grep / Glob", "ファイルの閲覧\nコード検索"),
+        ("Edit / Write", "ファイルの編集\n作成"),
+        ("WebSearch /\nWebFetch", "Web検索\nページ取得"),
+        ("Task", "サブエージェント\nによる並列探索"),
+    ]
+
+    x = Inches(0.8)
+    card_w = Inches(2.7)
+    for name, desc in basic_tools:
+        add_shape_bg(slide, x, Inches(1.9), card_w, Inches(1.4),
+                     RGBColor(0x25, 0x22, 0x20), 0.03)
+        add_text_box(
+            slide, x + Inches(0.2), Inches(2.0), Inches(2.3), Inches(0.5),
+            name, font_size=14, color=HIGHLIGHT, bold=True, font_name=FONT_CODE
+        )
+        add_text_box(
+            slide, x + Inches(0.2), Inches(2.55), Inches(2.3), Inches(0.7),
+            desc, font_size=13, color=TEXT_LIGHT
+        )
+        x += Inches(2.9)
+
+    # Bash（下段・大きく）
+    add_shape_bg(slide, Inches(0.8), Inches(3.6), Inches(11.5), Inches(3.0),
+                 RGBColor(0x1E, 0x2A, 0x35), 0.03)
+    add_text_box(
+        slide, Inches(1.2), Inches(3.7), Inches(10), Inches(0.5),
+        "Bash — あらゆるコマンドを実行できる", font_size=22, color=ACCENT, bold=True
+    )
+
+    code_lines = (
+        'say "完了しました"           # 音声で通知\n'
+        "python generate_slides.py    # スライド生成\n"
+        "ffmpeg -i video.mp4 out.gif  # 動画をGIFに変換\n"
+        "git log --oneline -10        # 直近のコミットを確認\n"
+        "npm test                     # テスト実行"
+    )
+    add_code_block(
+        slide, Inches(1.2), Inches(4.3), Inches(10.5), Inches(2.1),
+        code_lines, font_size=14
+    )
+
+    add_text_box(
+        slide, Inches(0.8), Inches(6.8), Inches(11.5), Inches(0.5),
+        "→ 開発作業に限らない。コマンドで実現できることは、何でも",
+        font_size=16, color=ACCENT
+    )
+
+    add_page_number(slide, 5)
+    add_speaker_notes(slide,
+        "Claude Codeが使えるツールを見てみる。\n"
+        "基本ツール：ファイルの読み書き・検索、Web検索、サブエージェント。"
+        "これらはClaude Codeの内蔵ツール。\n"
+        "注目はBash。文字通り「あらゆるコマンド」を実行できる。\n"
+        "テストやビルドはもちろん、たとえば音声で通知を鳴らす、"
+        "Pythonスクリプトでスライドを生成する、ffmpegで動画を変換する。"
+        "こういったことも全部Bashツールの守備範囲。\n"
+        "つまり「ターミナルでコマンドを叩けばできること」は、"
+        "原理的にすべてClaude Codeに任せられる。\n"
+        "どのツールを使うかは指定不要。指示に応じてClaude Codeが自動で組み合わせる。")
+
+
+def slide_06_role_comparison(prs):
     """ChatGPT・Copilotとの使い分け."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
@@ -392,7 +466,7 @@ def slide_05_role_comparison(prs):
         font_size=16, color=TEXT_DIM
     )
 
-    add_page_number(slide, 5)
+    add_page_number(slide, 6)
     add_speaker_notes(slide,
         "3つのツールは競合ではなく補完的。得意領域が異なる。\n"
         "ChatGPTは壁打ちに強い。設計議論、仕様の言語化、アプローチ比較。\n"
@@ -402,7 +476,7 @@ def slide_05_role_comparison(prs):
         "大事なのは「どれか1つ」ではなく使い分けること。")
 
 
-def slide_06_workflow_shift(prs):
+def slide_07_workflow_shift(prs):
     """開発フローがどう変わるか."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
@@ -531,7 +605,7 @@ def slide_06_workflow_shift(prs):
         font_size=18, color=ACCENT, bold=True
     )
 
-    add_page_number(slide, 6)
+    add_page_number(slide, 7)
     add_speaker_notes(slide,
         "従来の開発では全工程を自分で回す。6ステップすべてが自分の作業。\n"
         "Claude Codeを使うと、開発者の出番は2箇所に絞られる。"
@@ -540,7 +614,7 @@ def slide_06_workflow_shift(prs):
         "「コード補完」と「エージェント」の本質的な違いはここにある。")
 
 
-def slide_07_task_example(prs):
+def slide_08_task_example(prs):
     """具体例で見てみる."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
@@ -628,7 +702,7 @@ def slide_07_task_example(prs):
         font_size=18, color=ACCENT, bold=True
     )
 
-    add_page_number(slide, 7)
+    add_page_number(slide, 8)
     add_speaker_notes(slide,
         "具体的なタスクで流れを見てみる。\n"
         "「CIが落ちた」という日常的なシナリオ。\n"
@@ -640,7 +714,7 @@ def slide_07_task_example(prs):
         "ここからPART 2で「伝え方のコツ」を見ていく。")
 
 
-def slide_08_section_communication(prs):
+def slide_09_section_communication(prs):
     """セクション区切り — コミュニケーション."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_SECTION)
@@ -661,7 +735,7 @@ def slide_08_section_communication(prs):
         font_size=24, color=TEXT_LIGHT, alignment=PP_ALIGN.CENTER
     )
 
-    add_page_number(slide, 8)
+    add_page_number(slide, 9)
     add_speaker_notes(slide,
         "PART 2。コミュニケーションの話。\n"
         "先ほどの例で、開発者の発話は2回だけだった。短い。"
@@ -672,7 +746,7 @@ def slide_08_section_communication(prs):
         "期待通りの結果は返ってこない。")
 
 
-def slide_09_agent_mental_model(prs):
+def slide_10_agent_mental_model(prs):
     """チャットボットとエージェントの違い."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
@@ -731,7 +805,7 @@ def slide_09_agent_mental_model(prs):
         font_size=16, color=ACCENT
     )
 
-    add_page_number(slide, 9)
+    add_page_number(slide, 10)
     add_speaker_notes(slide,
         "チャットボットとエージェントは根本的に違う。\n"
         "チャットボットは電話サポートに近い。こちらが1ステップずつ指示して、"
@@ -744,7 +818,7 @@ def slide_09_agent_mental_model(prs):
         "この「委任」の感覚が、Claude Codeではとても重要。")
 
 
-def slide_10_good_instructions(prs):
+def slide_11_good_instructions(prs):
     """指示の出し方."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
@@ -801,18 +875,18 @@ def slide_10_good_instructions(prs):
         font_size=13
     )
 
-    add_page_number(slide, 10)
+    add_page_number(slide, 11)
     add_speaker_notes(slide,
         "指示の4要素：目標、背景・制約、現状、期待する出力。\n"
         "全部揃っている必要はない。しかし、目標は必須。\n"
         "悪い例：「この機能を改善して」。何を？どう？がまったく不明。\n"
-        "良い例：Slide 07と同じCIのシナリオ。現状・目標・制約・出力形式が明確。\n"
+        "良い例：Slide 08と同じCIのシナリオ。現状・目標・制約・出力形式が明確。\n"
         "「コードの変更はまだしないこと」が地味に大事。"
         "やってほしくないことを書くと暴走を防げる。\n"
         "ポイント：指示が具体的であるほど、結果も具体的になる。")
 
 
-def slide_11_iteration_loop(prs):
+def slide_12_iteration_loop(prs):
     """たたき台から始める."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
@@ -876,7 +950,7 @@ def slide_11_iteration_loop(prs):
         font_size=16, color=ACCENT
     )
 
-    add_page_number(slide, 11)
+    add_page_number(slide, 12)
     add_speaker_notes(slide,
         "最初から完璧を求めない。これが一番大事なマインドセット。\n"
         "まず出力を見て、良い点と悪い点を具体的にフィードバックし、"
@@ -889,7 +963,7 @@ def slide_11_iteration_loop(prs):
         "伝えないと古い状態を前提に動いてしまう。")
 
 
-def slide_12_section_plan_mode(prs):
+def slide_13_section_plan_mode(prs):
     """セクション区切り — Plan Mode."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_SECTION)
@@ -910,7 +984,7 @@ def slide_12_section_plan_mode(prs):
         font_size=24, color=TEXT_LIGHT, alignment=PP_ALIGN.CENTER
     )
 
-    add_page_number(slide, 12)
+    add_page_number(slide, 13)
     add_speaker_notes(slide,
         "Part 3。Plan Modeの話。\n"
         "「いきなりコードを書かせない」。これが合言葉。\n"
@@ -919,7 +993,7 @@ def slide_12_section_plan_mode(prs):
         "計画から始めることで手戻りを大幅に減らせる。")
 
 
-def slide_13_plan_mode_what(prs):
+def slide_14_plan_mode_what(prs):
     """Plan Mode とは."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
@@ -976,7 +1050,7 @@ def slide_13_plan_mode_what(prs):
         font_size=16, bullet=True, line_spacing=1.5
     )
 
-    add_page_number(slide, 13)
+    add_page_number(slide, 14)
     add_speaker_notes(slide,
         "Plan Modeは読み取り専用。ファイルを見たり検索はできるが、"
         "編集やコマンド実行はできない。\n"
@@ -992,7 +1066,7 @@ def slide_13_plan_mode_what(prs):
         "両者の併用も可能。")
 
 
-def slide_14_plan_mode_workflow(prs):
+def slide_15_plan_mode_workflow(prs):
     """Plan Mode の実践ワークフロー."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
@@ -1064,7 +1138,7 @@ def slide_14_plan_mode_workflow(prs):
         )
         x += Inches(3.8)
 
-    add_page_number(slide, 14)
+    add_page_number(slide, 15)
     add_speaker_notes(slide,
         "4ステップのワークフロー。\n"
         "Step 1：「計画を立てて。実装はまだしないで。」この一言が鍵。\n"
@@ -1078,7 +1152,7 @@ def slide_14_plan_mode_workflow(prs):
         "小さな修正でもこの流れを習慣にすると手戻りが劇的に減る。")
 
 
-def slide_15_summary(prs):
+def slide_16_summary(prs):
     """まとめ / 次回予告."""
     slide = prs.slides.add_slide(prs.slide_layouts[6])
     set_slide_bg(slide, BG_DARK)
@@ -1123,7 +1197,7 @@ def slide_15_summary(prs):
         font_size=18, color=ACCENT, bold=True
     )
 
-    add_page_number(slide, 15)
+    add_page_number(slide, 16)
     add_speaker_notes(slide,
         "まとめ。今日の持ち帰りは3つ。\n"
         "1つ目：Claude Codeはコード補完ではなく「作業を進める」ツール。\n"
@@ -1146,17 +1220,18 @@ def main():
     slide_02_series_overview(prs)
     slide_03_first_step(prs)
     slide_04_what_is_cc(prs)
-    slide_05_role_comparison(prs)
-    slide_06_workflow_shift(prs)
-    slide_07_task_example(prs)
-    slide_08_section_communication(prs)
-    slide_09_agent_mental_model(prs)
-    slide_10_good_instructions(prs)
-    slide_11_iteration_loop(prs)
-    slide_12_section_plan_mode(prs)
-    slide_13_plan_mode_what(prs)
-    slide_14_plan_mode_workflow(prs)
-    slide_15_summary(prs)
+    slide_05_tools(prs)
+    slide_06_role_comparison(prs)
+    slide_07_workflow_shift(prs)
+    slide_08_task_example(prs)
+    slide_09_section_communication(prs)
+    slide_10_agent_mental_model(prs)
+    slide_11_good_instructions(prs)
+    slide_12_iteration_loop(prs)
+    slide_13_section_plan_mode(prs)
+    slide_14_plan_mode_what(prs)
+    slide_15_plan_mode_workflow(prs)
+    slide_16_summary(prs)
 
     output_path = "slides/session1.pptx"
     prs.save(output_path)
