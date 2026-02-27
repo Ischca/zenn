@@ -30,6 +30,17 @@ uv pip install <package>    # どうしても pip 互換が必要な場合
 - `articles/` - 記事（Markdown）
 - `books/` - 書籍
 - `images/` - 画像
+- `slides/` - 勉強会スライド（PowerPoint）
+
+## スライド編集
+
+パワポファイル（`.pptx`）が正。編集は `python-pptx` で既存ファイルを直接読み書きする。
+
+```bash
+uv run slides/edit_slides.py   # inline script metadata で依存解決
+```
+
+生成スクリプトからの再生成はしない。
 
 ## 文体ガイドライン
 
