@@ -188,8 +188,8 @@ def slide_02_series_overview(prs):
 
     sessions = [
         ("第1回（今日）", "理解する", "基本 / コミュニケーション / Plan Mode", True),
-        ("第2回", "プロジェクトに合わせた\nカスタマイズ", "CLAUDE.md / Skills / Hooks", False),
-        ("第3回", "外部連携と並列開発", "MCP / worktree / サブエージェント", False),
+        ("第2回", "プロジェクトに\n定着させる", "コンテキスト / CLAUDE.md / スラッシュコマンド / Skills / Hooks", False),
+        ("第3回", "大規模開発に挑む", "MCP / worktree / サブエージェント", False),
     ]
 
     y = Inches(1.6)
